@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+  <head>
+      <title>New Incident</title>
+      <link rel='stylesheet' type='text/css' href='assets/main.css'>
+      <link rel='stylesheet' type='text/css' href='assets/semantic.min.css'>
+      <link rel='stylesheet' type='text/css' href='assets/components/dropdown.min.css'>
+      <script src='assets/jquery.min.js'></script>
+      <script src='assets/components/dropdown.min.js'></script>
+      <script src='assets/semantic.min.js'></script>
+      <script src='assets/main.js'></script>
+      <script>
+        $(function() {
+          $('.ui.dropdown').dropdown();
+          var user_id = localStorage.getItem('user_id');
+          var role_id = localStorage.getItem('role');
+          if (!user_id || !role_id) {
+            window.location.replace('index.html');
+          }
+          $.ajax({
+            url: "http://ec2-54-237-22-83.compute-1.amazonaws.com/buildings/user/" + user_id,
+            success: function (data) {
+              $.each(data, function(key, building){
+                $('#building-dropdown').append("<div class='item' data-value='" + building.building_id + "'>" + building.address + "</div>");
+              });
+            },
+            error: function (data) {
+            }
+          })
+          $("#building-select").dropdown({
+              onChange: function (val) {
+                $('#floor-select').removeClass('disabled');
+                $('#space-select').addClass('disabled');
+                $('#floor-dropdown').html('');
+                $.ajax({
+                  url: "http://ec2-54-237-22-83.compute-1.amazonaws.com/locations/building/" + val,
+                  success: function (data) {
+                    var unique_floors = [];
+                    $.each(data, function(key, location){
+                      if ( $.inArray(location.floor, unique_floors) == -1 ) {
+                        unique_floors[key] = location.floor;
+                        $('#floor-dropdown').append("<div class='item' data-value='" + location.floor + "'>" + location.floor + "</div>");
+                      }
+                    });
+                  },
+                  error: function (data) {
+                  }
+                })
+              }
+          });
+          $("#floor-select").dropdown({
+              onChange: function (val) {
+                $('#space-select').removeClass('disabled');
+                $('#space-dropdown').html('');
+                $.ajax({
+                  url: "http://ec2-54-237-22-83.compute-1.amazonaws.com/locations/building/" + $('#selected-building-id').val() + "/floor/" +val,
+                  success: function (data) {
+                    var unique_spaces = [];
+                    $.each(data, function(key, location){
+                      if ( $.inArray(location.floor, unique_spaces) == -1 ) {
+                        unique_floors[key] = location.space_name;
+                        $('#floor-dropdown').append("<div class='item' data-value='" + location.space_name + "'>" + location.space_name + "</div>");
+                      }
+                    });
+                  },
+                  error: function (data) {
+                  }
+                })
+              }
+          });
+        });
+      </script>
+  </head>
+  <body bgcolor='#242624'>
+    <div class="ui top sidebar ui segment">
+      <div class="ui center aligned page grid">
+        <div class="one column row">
+          <div class="sixteen wide column">
+            <h3 class="ui header">Logout</h3>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class='ui piled segment'>
+      <div class='ui teal dividing header'>
+        <i class='configure icon left'></i>
+        <div class='content left'>
+          Fix It Now!
+          <div class='sub header'>A Crowd Sourced Facility Management Tool</div>
+        </div>
+        <i class='sidebar icon right'></i>
+      </div>
+    </div>
+    <div id='main'>
+      <div class='ui stacked segment welcome'>
+        <a class="ui ribbon teal label">New Incident</a>
+        <div class='ui form segment'>
+          <div class='field'>
+            <label>Description</label>
+            <textarea></textarea>
+          </div>
+          <div class='field'>
+            <label>Building</label>
+            <div class="ui selection dropdown" id='building-select' tabindex="0">
+              <div class="default text">Select</div>
+              <i class="dropdown icon"></i>
+              <input name="hidden-field" type="hidden" id='selected-building-id'>
+              <div class="menu transition hidden" id='building-dropdown' tabindex="-1" style="">
+              </div>
+            </div>
+          </div>
+          <div class='field' id='floor-field'>
+            <label>Floor</label>
+            <div class="ui selection dropdown disabled" id='floor-select' tabindex="0">
+              <div class="default text">Select</div>
+              <i class="dropdown icon"></i>
+              <input name="hidden-field" type="hidden" id='selected-floor'>
+              <div class="menu transition hidden" id='floor-dropdown' tabindex="-1" style="">
+              </div>
+            </div>
+          </div>
+          <div class='field' id='space-field'>
+            <label>Space</label>
+            <div class="ui selection dropdown disabled" id='space-select' tabindex="0">
+              <div class="default text">Select</div>
+              <i class="dropdown icon"></i>
+              <input name="hidden-field" type="hidden" id='selected-space'>
+              <div class="menu transition hidden" id='space-dropdown' tabindex="-1" style="">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
