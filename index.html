@@ -6,6 +6,27 @@
       <link rel='stylesheet' type='text/css' href='assets/semantic.min.css'>
       <script src='assets/jquery.min.js'></script>
       <script src='assets/semantic.min.js'></script>
+      <script>
+        $(function() {
+          $('.button').click(function(){
+            var username = $('#user_name').val(),
+                password = $('#password').val();
+
+            $.ajax({
+              method: "POST",
+              url: "http://ec2-54-237-22-83.compute-1.amazonaws.com/login",
+              data: { user_name: username, password: password },
+              success: function (data) {
+                localStorage.setItem("user_id", data.user_id);
+                localStorage.setItem("role", data.role);
+                window.location.replace('buildings.html');
+              },
+              error: function (data) {
+              }
+            })
+          });
+        });
+      </script>
   </head>
   <body bgcolor='#242624'>
     <div class='ui piled segment'>
@@ -20,11 +41,11 @@
     <div id='main'>
       <div class='ui stacked segment welcome'>
         <div class='ui input'>
-          <input class='prompt' type='text' placeholder='User Name' />
+          <input id="user_name" class='prompt' type='text' placeholder='User Name' />
         </div>
         <br>
         <div class='ui input'>
-          <input class='prompt' type='password' placeholder='Password' />
+          <input id="password" class='prompt' type='password' placeholder='Password' />
         </div>
         <br><br>
         <div class="ui teal button">
