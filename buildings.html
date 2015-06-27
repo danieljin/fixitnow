@@ -16,14 +16,14 @@
             url: "http://ec2-54-237-22-83.compute-1.amazonaws.com/buildings/user/" + user_id,
             success: function (data) {
               $.each(data, function(key, building){
-                $(".building-list").append("<div class='building view-building-button' id=" + building.building_id + "><i class='chevron right icon teal'></i>" + building.address + "</div>");
-                $(".building-list").append("<div class='ui inverted divider'></div>");
+                $("#building-list").append("<div class='building view-building-button' id=" + building.building_id + "><i class='chevron right icon teal'></i>" + building.address + "</div>");
+                $("#building-list").append("<div class='ui inverted divider'></div>");
               });
               $('.view-building-button').click(function(e){
                 localStorage.setItem("building_id", e.target.id);
                 window.location.replace('reporter_dashboard.html');
               });
-              $(".building-list").append("<div class='building'><i class='add circle icon teal'></i>Register building</div>");
+              $("#building-list").append("<div class='building'><i class='add circle icon teal'></i>Register building</div>");
               $('#loading').hide();
             },
             error: function (data) {
@@ -50,7 +50,7 @@
      </div>
     </div>
     <div id='main'>
-      <div class='ui segment building-list'>
+      <div class='ui segment' id='building-list'>
         <h1>My Buildings</h1>
         <div class='ui inverted divider'></div>
       </div>
