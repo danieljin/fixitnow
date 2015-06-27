@@ -8,10 +8,6 @@
       <script src='assets/semantic.min.js'></script>
       <script>
         $(function(){
-          $('.button').click(function(){
-            debugger;
-          });
-
           var user_id = localStorage.getItem('user_id');
           if (!user_id) {
             window.location.replace('index.html');
@@ -20,10 +16,13 @@
             url: "http://ec2-54-237-22-83.compute-1.amazonaws.com/buildings/user/" + user_id,
             success: function (data) {
               $.each(data, function(key, building){
-                $(".building-list").append("<div class='building button'><i class='chevron right icon teal'></i>" + building.address + "</div>");
+                $(".building-list").append("<div class='building view-building-button' id=" + building.building_id + "><i class='chevron right icon teal'></i>" + building.address + "</div>");
                 $(".building-list").append("<div class='ui inverted divider'></div>");
               });
-              $(".building-list").append("<div class='building'><i class='add circle icon teal'></i>Register building...</div>");
+              $('.view-building-button').click(function(e){
+                localStorage.setItem("building_id", e.target.id);
+              });
+              $(".building-list").append("<div class='building'><i class='add circle icon teal'></i>Register building</div>");
             },
             error: function (data) {
             }
