@@ -19,6 +19,9 @@
               success: function (data) {
                 localStorage.setItem("user_id", data.user_id);
                 localStorage.setItem("role", data.role);
+                if (data.role == 1) {
+                  window.location.replace('reporter_dashboard.html');
+                }
                 window.location.replace('buildings.html');
               },
               error: function (data) {
