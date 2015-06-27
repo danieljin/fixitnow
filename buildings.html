@@ -23,6 +23,7 @@
                 localStorage.setItem("building_id", e.target.id);
               });
               $(".building-list").append("<div class='building'><i class='add circle icon teal'></i>Register building</div>");
+               $('#loading').hide();
             },
             error: function (data) {
             }
@@ -39,6 +40,13 @@
           <div class='sub header'>A Crowd Sourced Facility Management Tool</div>
         </div>
       </div>
+    </div>
+    <div id="loading">
+     <div class="ui active dimmer">
+       <div class="ui indeterminate text active loader">
+         Loading...
+       </div>
+     </div>
     </div>
     <div id='main'>
       <div class='ui segment building-list'>
