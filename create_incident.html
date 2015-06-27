@@ -30,8 +30,9 @@
           $("#building-select").dropdown({
               onChange: function (val) {
                 $('#floor-select').removeClass('disabled');
-                $('#space-select').addClass('disabled');
+                $('#space-select').addClass('disabled').dropdown('clear');
                 $('#floor-dropdown').html('');
+                $('#floor-select').dropdown('clear');
                 $.ajax({
                   url: "http://ec2-54-237-22-83.compute-1.amazonaws.com/locations/building/" + val,
                   success: function (data) {
@@ -50,16 +51,16 @@
           });
           $("#floor-select").dropdown({
               onChange: function (val) {
-                $('#space-select').removeClass('disabled');
+                $('#space-select').removeClass('disabled').dropdown('clear');;
                 $('#space-dropdown').html('');
                 $.ajax({
                   url: "http://ec2-54-237-22-83.compute-1.amazonaws.com/locations/building/" + $('#selected-building-id').val() + "/floor/" +val,
                   success: function (data) {
                     var unique_spaces = [];
                     $.each(data, function(key, location){
-                      if ( $.inArray(location.floor, unique_spaces) == -1 ) {
-                        unique_floors[key] = location.space_name;
-                        $('#floor-dropdown').append("<div class='item' data-value='" + location.space_name + "'>" + location.space_name + "</div>");
+                      if ( $.inArray(location.space_name, unique_spaces) == -1 ) {
+                        unique_spaces[key] = location.space_name;
+                        $('#space-dropdown').append("<div class='item' data-value='" + location.space_name + "'>" + location.space_name + "</div>");
                       }
                     });
                   },
