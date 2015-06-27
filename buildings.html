@@ -6,6 +6,7 @@
       <link rel='stylesheet' type='text/css' href='assets/semantic.min.css'>
       <script src='assets/jquery.min.js'></script>
       <script src='assets/semantic.min.js'></script>
+      <script src='assets/main.js'></script>
       <script>
         $(function(){
           var user_id = localStorage.getItem('user_id');
@@ -33,15 +34,25 @@
       </script>
   </head>
   <body bgcolor='#242624'>
-    <div class='ui piled segment'>
-      <div class='ui teal dividing header'>
-        <i class='configure icon'></i>
-        <div class='content'>
-          Fix It Now!
-          <div class='sub header'>A Crowd Sourced Facility Management Tool</div>
+  <div class="ui top sidebar ui segment">
+    <div class="ui center aligned page grid">
+      <div class="one column row">
+        <div class="sixteen wide column">
+          <h3 class="ui header">Logout</h3>
         </div>
       </div>
     </div>
+  </div>
+  <div class='ui piled segment'>
+    <div class='ui teal dividing header'>
+      <i class='configure icon left'></i>
+      <div class='content left'>
+        Fix It Now!
+        <div class='sub header'>A Crowd Sourced Facility Management Tool</div>
+      </div>
+      <i class='sidebar icon right'></i>
+    </div>
+  </div>
     <div id="loading">
      <div class="ui active dimmer">
        <div class="ui indeterminate text active loader">

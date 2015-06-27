@@ -26,6 +26,20 @@
     }
 }
 
+.ui.dividing.header {
+    -moz-column-count: 1;
+    -webkit-column-count: 1;
+    column-count: 1;
+}
+
+.left {
+    float: left;
+}
+
+.right {
+    float: right;
+}
+
 .segment {
     margin-top: 0px !important;
 }
