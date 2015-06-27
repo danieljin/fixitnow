@@ -21,8 +21,9 @@
                 localStorage.setItem("role", data.role);
                 if (data.role == 1) {
                   window.location.replace('reporter_dashboard.html');
+                } else {
+                  window.location.replace('buildings.html');
                 }
-                window.location.replace('buildings.html');
               },
               error: function (data) {
               }
