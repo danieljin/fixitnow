@@ -32,6 +32,10 @@
     column-count: 1;
 }
 
+#logout {
+    cursor: pointer;
+}
+
 .left {
     float: left;
 }
