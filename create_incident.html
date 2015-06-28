@@ -70,6 +70,15 @@
               }
           });
         });
+        function capturePhoto(){
+            navigator.camera.getPicture(uploadPhoto,null,{sourceType:1,quality:60});
+        }
+        function uploadPhoto(data){
+        // this is where you would send the image file to server
+        debugger;
+        //output image to screen
+            cameraPic.src = "data:image/jpeg;base64," + data;
+        }
       </script>
   </head>
   <body bgcolor='#242624'>
@@ -93,44 +102,11 @@
       </div>
     </div>
     <div id='main'>
-      <div class='ui stacked segment welcome'>
-        <a class="ui ribbon teal label">New Incident</a>
-        <div class='ui form segment'>
-          <div class='field'>
-            <label>Description</label>
-            <textarea></textarea>
+      <div id="camera">
+          <button class="camera-control" onclick="capturePhoto();">Capture Photo</button>
+          <div style="text-align:center;margin:20px;">
+              <img id="cameraPic" src="" style="width:auto;height:120px;"></img>
           </div>
-          <div class='field'>
-            <label>Building</label>
-            <div class="ui selection dropdown" id='building-select' tabindex="0">
-              <div class="default text">Select</div>
-              <i class="dropdown icon"></i>
-              <input name="hidden-field" type="hidden" id='selected-building-id'>
-              <div class="menu transition hidden" id='building-dropdown' tabindex="-1" style="">
-              </div>
-            </div>
-          </div>
-          <div class='field' id='floor-field'>
-            <label>Floor</label>
-            <div class="ui selection dropdown disabled" id='floor-select' tabindex="0">
-              <div class="default text">Select</div>
-              <i class="dropdown icon"></i>
-              <input name="hidden-field" type="hidden" id='selected-floor'>
-              <div class="menu transition hidden" id='floor-dropdown' tabindex="-1" style="">
-              </div>
-            </div>
-          </div>
-          <div class='field' id='space-field'>
-            <label>Space</label>
-            <div class="ui selection dropdown disabled" id='space-select' tabindex="0">
-              <div class="default text">Select</div>
-              <i class="dropdown icon"></i>
-              <input name="hidden-field" type="hidden" id='selected-space'>
-              <div class="menu transition hidden" id='space-dropdown' tabindex="-1" style="">
-              </div>
-            </div>
-          </div>
-        </div>
       </div>
     </div>
   </body>
