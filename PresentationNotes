@@ -2,7 +2,7 @@
     Daniel Jin and Chris Larson
 
 ===Team Name===
-
+    
 
 ===Product Name===
     Fix It Now
@@ -29,4 +29,28 @@
     As above - our application runs on computers, tablets, iPhone, Android, and (untested) Windows phone.
 
     We allow third party devices to integrate with our application - this means that you can set up smoke alarms, carbon monoxide detectors, water pressure sensors, thermostats, seismographs, circuit breakers, or security cameras to push alerts to maintenence, residents, or anyone using the app.
+
+
+------------------
+1. Log in as tenant
+2. Show off My Incidents and Modal
+3. Show off All Incidents
+4. Show off map view
+5. Create a new incident
+6. Log out
+
+7. Log in as mechanic
+6. View Issues Assigned To Me.
+7. Resolve an issue.
+8. View all issues, and assign one to myself.
+
+9. Log in as landlord
+10. Show off Unassigned Issues
+11. Show off devices
+12. Simulate a disaster from a device
+13. Show that this new disaster appeared in the List.
+
+14. Questions?
+
+
 
