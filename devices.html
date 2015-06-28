@@ -24,7 +24,7 @@
                 $("#device-list").append("<div class='device view-building-button' id=" + device.device_id + ">" + device.device_name + "<div class='ui red delete button' id=" + device.device_id+ ">Delete</div></div>");
                 $("#device-list").append("<div class='ui inverted divider'></div>");
               });
-              $("#device-list").append("<div class='device'><i class='add circle icon teal'></i>Register Device</div>");
+              $("#device-list").append("<div class='new device'><i class='add circle icon teal'></i>Register Device</div>");
               $('#loading').hide();
               $('.delete.button').click(function(e){
                 $.ajax({
@@ -37,6 +37,9 @@
                     window.location.replace('error.html');
                   }
                 })
+              });
+              $('.new.device').click(function(e){
+                window.location.replace('register_device.html');
               });
             },
             error: function (data) {
