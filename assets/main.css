@@ -181,3 +181,7 @@ h3.ui.header>.icon {
 .ui.items {
   margin: 0 !important;
 }
+
+.map-summary {
+    width: 100%;
+}

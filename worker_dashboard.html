@@ -108,7 +108,7 @@
                       images = '<div class="ui center aligned segment">';
                       $.each(unique_floor_plans, function(key, plan){
                         if(unique_floor_plans[key]) {
-                          images = images + '<h2>Floor: ' + key + '</h2><img src=' + unique_floor_plans[key] + '>';
+                          images = images + '<div><h2>Floor: ' + key + '</h2><img src=' + unique_floor_plans[key] + ' class="map-summary"></div>';
                         }
                       });
                       images = images + "</div>"
