@@ -9,7 +9,44 @@
       <script src='assets/components/dropdown.min.js'></script>
       <script src='assets/semantic.min.js'></script>
       <script src='assets/main.js'></script>
-      <script>
+      <script type="text/javascript" charset="utf-8" src="cordova.js"></script>
+      <script type="text/javascript" charset="utf-8">
+        var pictureSource;   // picture source
+        var destinationType; // sets the format of returned value
+
+        // Wait for device API libraries to load
+        //
+        document.addEventListener("deviceready",onDeviceReady,false);
+
+        // device APIs are available
+        //
+        function onDeviceReady() {
+            pictureSource=navigator.camera.PictureSourceType;
+            destinationType=navigator.camera.DestinationType;
+        }
+        function capturePhoto() {
+          // Take picture using device camera and retrieve image as base64-encoded string
+          navigator.camera.getPicture(onPhotoDataSuccess, onFail, { quality: 50,
+            destinationType: destinationType.DATA_URL });
+        }
+        // A button will call this function
+        //
+        function getPhoto(source) {
+          // Retrieve image file location from specified source
+          navigator.camera.getPicture(onPhotoDataSuccess, onFail, { quality: 50,
+            destinationType: destinationType.DATA_URL});
+        }
+
+        // Called when a photo is successfully retrieved
+        //
+        function onPhotoDataSuccess(imageData) {
+          // Uncomment to view the base64-encoded image data
+          console.log(imageData);
+        }
+        // Called if something bad happens.
+        //
+        function onFail(message) {
+        }
         $(function() {
           $('.ui.dropdown').dropdown();
           var user_id = localStorage.getItem('user_id');
@@ -69,16 +106,14 @@
                 })
               }
           });
+
+          $('#camera').click(function(){
+            capturePhoto();
+          });
+          $('#album').click(function(){
+            getPhoto(pictureSource.PHOTOLIBRARY);
+          });
         });
-        function capturePhoto(){
-            navigator.camera.getPicture(uploadPhoto,null,{sourceType:1,quality:60});
-        }
-        function uploadPhoto(data){
-        // this is where you would send the image file to server
-        debugger;
-        //output image to screen
-            cameraPic.src = "data:image/jpeg;base64," + data;
-        }
       </script>
   </head>
   <body bgcolor='#242624'>
@@ -102,11 +137,55 @@
       </div>
     </div>
     <div id='main'>
-      <div id="camera">
-          <button class="camera-control" onclick="capturePhoto();">Capture Photo</button>
-          <div style="text-align:center;margin:20px;">
-              <img id="cameraPic" src="" style="width:auto;height:120px;"></img>
+      <div class='ui stacked segment welcome'>
+        <a class="ui ribbon teal label">New Incident</a>
+        <div class='ui form segment'>
+          <div class='field'>
+            <label>Add Photo</label>
+            <div id="camera" class="ui labeled icon button">
+                <i class="camera icon"></i>
+                Capture Photo
+            </div>
+            <div id="album" class="ui labeled icon button">
+                <i class="picture icon"></i>
+                Add From Photo Library
+            </div>
           </div>
+          <div class='field'>
+            <label>Description</label>
+            <textarea></textarea>
+          </div>
+          <div class='field'>
+            <label>Building</label>
+            <div class="ui selection dropdown" id='building-select' tabindex="0">
+              <div class="default text">Select</div>
+              <i class="dropdown icon"></i>
+              <input name="hidden-field" type="hidden" id='selected-building-id'>
+              <div class="menu transition hidden" id='building-dropdown' tabindex="-1" style="">
+              </div>
+            </div>
+          </div>
+          <div class='field' id='floor-field'>
+            <label>Floor</label>
+            <div class="ui selection dropdown disabled" id='floor-select' tabindex="0">
+              <div class="default text">Select</div>
+              <i class="dropdown icon"></i>
+              <input name="hidden-field" type="hidden" id='selected-floor'>
+              <div class="menu transition hidden" id='floor-dropdown' tabindex="-1" style="">
+              </div>
+            </div>
+          </div>
+          <div class='field' id='space-field'>
+            <label>Space</label>
+            <div class="ui selection dropdown disabled" id='space-select' tabindex="0">
+              <div class="default text">Select</div>
+              <i class="dropdown icon"></i>
+              <input name="hidden-field" type="hidden" id='selected-space'>
+              <div class="menu transition hidden" id='space-dropdown' tabindex="-1" style="">
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </body>
