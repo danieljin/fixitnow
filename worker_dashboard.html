@@ -95,6 +95,33 @@
               error: function (data) {
               }
             });
+            $("#building-select").dropdown({
+              onChange: function (val) {
+                $.ajax({
+                  url: "http://ec2-54-237-22-83.compute-1.amazonaws.com/locations/building/" + val,
+                  success: function (data) {
+                    var unique_floor_plans = [];
+                    $.each(data, function(key, building){
+                      unique_floor_plans[building.floor] = building.floor_plan;
+                    });
+                    var images = '';
+                    if (unique_floor_plans.length > 0){
+                      images = '<div class="ui center aligned segment">';
+                      $.each(unique_floor_plans, function(key, plan){
+                        if(unique_floor_plans[key]) {
+                          images = images + '<h2>Floor: ' + key + '</h2><img src=' + unique_floor_plans[key] + '>';
+                        }
+                      });
+                      images = images + "</div>"
+                    }
+                    $('#map-contents').html(images);
+                  },
+                  error: function (data) {
+                    window.location.replace('error.html');
+                  }
+                });
+              }
+          });
           }
         });
       </script>
@@ -154,6 +181,8 @@
               <div class="menu transition hidden" id='building-dropdown' tabindex="-1" style="">
               </div>
             </div>
+          </div>
+          <div id='map-contents'>
           </div>
         </div>
       </div>
