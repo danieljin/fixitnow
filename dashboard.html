@@ -216,22 +216,14 @@
                 $('#incident-list-my').addClass('hidden');
                 $('#incident-list-all').removeClass('hidden');
                 $('#map-view').addClass('hidden');
-                $('#summary-view').addClass('hidden');
               } else if(this.text.trim() == 'My Incidents' || this.text.trim() == 'Unassigned Incidents') {
                 $('#incident-list-all').addClass('hidden');
                 $('#incident-list-my').removeClass('hidden');
                 $('#map-view').addClass('hidden');
-                $('#summary-view').addClass('hidden');
               } else if(this.text.trim() == 'Map') {
                 $('#incident-list-all').addClass('hidden');
                 $('#incident-list-my').addClass('hidden');
                 $('#map-view').removeClass('hidden');
-                $('#summary-view').addClass('hidden');
-              } else if(this.text.trim() == 'Summary') {
-                $('#incident-list-all').addClass('hidden');
-                $('#incident-list-my').addClass('hidden');
-                $('#map-view').addClass('hidden');
-                $('#summary-view').removeClass('hidden');
               }
             });
 
@@ -442,9 +434,6 @@
           All Incidents
         </a>
         <a class="item">
-          Summary
-        </a>
-        <a class="item">
           Map
         </a>
       </div>
@@ -452,8 +441,6 @@
         <div id="incident-list-my" class='ui divided items'>
         </div>
         <div id="incident-list-all" class='ui divided items hidden'>
-        </div>
-        <div id="summary-view" class='ui form segment hidden'>
         </div>
         <div id="map-view" class='ui form segment hidden'>
           <div class='field'>
