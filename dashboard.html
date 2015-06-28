@@ -85,14 +85,18 @@
                           $('.black.button').addClass('hidden');
                         } else if (!data.assignee_id) {
                           $('.black.button').removeClass('hidden');
-                          $('#worker-buttons').removeClass('hidden');
+                          if (localStorage.getItem('role') == 2) {
+                            $('#worker-buttons').removeClass('hidden');
+                          }
                         }
 
                         if (data.assignee_id != localStorage.getItem('user_id')) {
                           $('.positive.button').addClass('hidden');
                         } else if (data.assignee_id == localStorage.getItem('user_id') && parseInt(data.status_id) < 2) {
                           $('.positive.button').removeClass('hidden');
-                          $('#worker-buttons').removeClass('hidden');
+                          if (localStorage.getItem('role') == 2) {
+                            $('#worker-buttons').removeClass('hidden');
+                          }
                         }
 
                         $('.ui.standard.modal img')[0].src = data.image;
