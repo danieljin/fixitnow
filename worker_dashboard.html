@@ -69,7 +69,6 @@
             $('.item').click(function(){
               $('.active').removeClass('active');
               $(this).addClass('active');
-              $('.ribbon').html(this.text.trim());
               if (this.text.trim() == 'All Issues') {
                 $('#incident-list-my').addClass('hidden');
                 $('#incident-list-all').removeClass('hidden');
@@ -166,7 +165,6 @@
         </a>
       </div>
       <div class='ui stacked segment welcome'>
-        <a class="ui ribbon teal label">My Issues</a>
         <div id="incident-list-my" class='ui divided items'>
         </div>
         <div id="incident-list-all" class='ui divided items hidden'>
