@@ -30,9 +30,9 @@ function returnToDashboard() {
   if (!role) {
     window.location.replace('index.html');
   } else if (role == 1) {
-    window.location.replace('reporter_dashboard.html');
+    window.location.replace('dashboard.html');
   } else if (role == 2) {
-    window.location.replace('worker_dashboard.html');
+    window.location.replace('dashboard.html');
   } else if (role == 3) {
     window.location.replace('manager_dashboard.html');
   } else {
