@@ -249,7 +249,7 @@
             $('.save.button').click(function(e){
               e.preventDefault();
               var image_src;
-              if ($('#smallImage img')[0].src.length > 100) {
+              if ($('#smallImage img')[0].src.length > 500) {
                 image_src = $('#smallImage img')[0].src;
               }
               $.ajax({
@@ -338,13 +338,13 @@
           Assign to Me
         </div>
         <div class="ui positive button">
-          Resolve Incident
+          Manage Incident
         </div>
       </div>
     </div>
     <div class="ui resolve modal transition">
       <i class="close icon"></i>
-      <div class="header">Resolve Incident</div>
+      <div class="header">Manage Incident</div>
       <div class="content">
         <div class='field'>
           <label>Status:</label><br>
