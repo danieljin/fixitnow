@@ -104,11 +104,23 @@
                           }
                         }
 
+                        if (localStorage.getItem('role') == 3) {
+                          $('#priority-field').removeClass('hidden');
+                          $('.black.button').addClass('hidden');
+                          if (parseInt(data.status_id) < 2) {
+                            $('#worker-buttons').removeClass('hidden');
+                            $('.positive.button').removeClass('hidden');
+                          } else {
+                            $('.positive.button').addClass('hidden');
+                            $('#worker-buttons').addClass('hidden');
+                          }
+                        }
+
                         $('.ui.standard.modal img')[0].src = data.image;
                         $('#description').html('<b>Description</b>: ' + data.description);
                         $('#address').html('<b>Address</b>: ' + data.address);
                         $('#floor').html('<b>Floor</b>: ' + data.floor);
-                        $('#space').html('<b><Space/b>: ' + data.space);
+                        $('#space').html('<b>Space</b>: ' + data.space_name);
                         $('#status').html('<b>Status</b>: ' + data.status);
                         $('#date_reported').html('<b>Date Reported</b>: ' + data.date_reported);
                         $('#date_expected').html('<b>Date Expected</b>: ' + data.date_expected);
@@ -191,12 +203,17 @@
 
             $('.save.button').click(function(e){
               e.preventDefault();
+              var image_src;
+              if ($('#smallImage img')[0].src.length > 100) {
+                image_src = $('#smallImage img')[0].src;
+              }
               $.ajax({
                 method: "POST",
                 url: "http://ec2-54-237-22-83.compute-1.amazonaws.com/resolve/" + incident_id,
                 data: {
                   status: $('#status-select').dropdown('get value'),
-                  image: $('img')[0].src
+                  priority: $('#priority-select').dropdown('get value'),
+                  image: image_src
                 },
                 success: function (data) {
                   location.reload();
@@ -296,6 +313,23 @@
               <div data-value="2" class="item">Resolved</div>
               <div data-value="3" class="item">Not an Issue</div>
               <div data-value="4" class="item">Will Not Fix</div>
+            </div>
+          </div>
+        </div>
+        <br>
+        <div id='priority-field' class='field hiddn'>
+          <label>Priority:</label><br>
+          <div id="priority-select" class="ui selection dropdown" tabindex="0">
+            <div class="default text">Select</div>
+            <i class="dropdown icon"></i>
+            <input name="hidden-field" type="hidden">
+            <div class="menu transition hidden" tabindex="-1" style="">
+              <div data-value="0" class="item">0</div>
+              <div data-value="1" class="item">1</div>
+              <div data-value="2" class="item">2</div>
+              <div data-value="3" class="item">3</div>
+              <div data-value="4" class="item">4</div>
+              <div data-value="5" class="item">5</div>
             </div>
           </div>
         </div>
