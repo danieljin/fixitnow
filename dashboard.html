@@ -21,8 +21,13 @@
             var url;
             if (role == 1) {
               url = 'http://ec2-54-237-22-83.compute-1.amazonaws.com/incident/user/';
+              $('a.active.item').html('My Incidents');
             } else if (role == 2) {
               url = 'http://ec2-54-237-22-83.compute-1.amazonaws.com/incident/worker/';
+              $('a.active.item').html('My Incidents');
+            } else if (role == 3) {
+              url = 'http://ec2-54-237-22-83.compute-1.amazonaws.com/incident/unassigned/';
+              $('a.active.item').html('Unassigned Incidents');
             }
             $.ajax({
               url: url + user_id,
@@ -254,7 +259,6 @@
     <div id='main'>
       <div class="ui top attached tabular menu">
         <a class="active item">
-          My Incidents
         </a>
         <a class="item">
           All Incidents
