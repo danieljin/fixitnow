@@ -96,16 +96,6 @@
               }
             });
             $('.ui.dropdown').dropdown();
-            $.ajax({
-              url: "http://ec2-54-237-22-83.compute-1.amazonaws.com/buildings/user/" + user_id,
-              success: function (data) {
-                $.each(data, function(key, building){
-                  $('#building-dropdown').append("<div class='item' data-value='" + building.building_id + "'>" + building.address + "</div>");
-                });
-              },
-              error: function (data) {
-              }
-            });
             $("#building-select").dropdown({
               onChange: function (val) {
                 $.ajax({
