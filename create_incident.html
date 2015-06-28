@@ -158,7 +158,7 @@
                 reporter_id: localStorage.getItem('user_id')
               },
               success: function (data) {
-                window.location.replace('reporter_dashboard.html');
+                returnToDashboard();
               },
               error: function (data) {
                 window.location.replace('error.html');
