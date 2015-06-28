@@ -48,7 +48,10 @@
                 success: function (data) {
                   $("#incident-list-all").append('<div class="link item"><div id="add-new-incident" class="content new-building-button"><a class="header"><i class="huge add circle icon teal"></i>Create a New Incident</a></div>');
                   $.each(data, function(key, incident){
-                    $("#incident-list-all").append('<div class="link item"> <div class="ui tiny image"> <img src="assets/image.png"> </div><div id=' + incident.incident_id + ' class="content view-building-button"><a class="header">' + incident.address + '</a><div class="meta"><b>Status:</b>' + incident.status + '<br><b>Reported:</b> ' + incident.date_reported +'</div><div class="description">' + incident.description + '</div></div>');
+                    if (!incident.image) {
+                      incident.image = 'assets/image.png'
+                    }
+                    $("#incident-list-all").append('<div class="link item"> <div class="ui tiny image"> <img src="' + incident.image +'"> </div><div id=' + incident.incident_id + ' class="content view-building-button"><a class="header">' + incident.address + '</a><div class="meta"><b>Status:</b>' + incident.status + '<br><b>Reported:</b> ' + incident.date_reported +'</div><div class="description">' + incident.description + '</div></div>');
                   });
                   $('.view-building-button').click(function(e){
                     localStorage.setItem("building_id", e.target.id);
@@ -91,7 +94,7 @@
               },
               error: function (data) {
               }
-            })
+            });
           }
         });
       </script>
