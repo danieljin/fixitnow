@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+  <head>
+      <title>New Device</title>
+      <link rel='stylesheet' type='text/css' href='assets/main.css'>
+      <link rel='stylesheet' type='text/css' href='assets/semantic.min.css'>
+      <link rel='stylesheet' type='text/css' href='assets/components/dropdown.min.css'>
+      <script src='assets/jquery.min.js'></script>
+      <script src='assets/components/dropdown.min.js'></script>
+      <script src='assets/semantic.min.js'></script>
+      <script src='assets/main.js'></script>
+      <script type="text/javascript" charset="utf-8" src="cordova.js"></script>
+      <script type="text/javascript" charset="utf-8">
+        $(function() {
+          $('.ui.dropdown').dropdown();
+          var user_id = localStorage.getItem('user_id');
+          var role_id = localStorage.getItem('role');
+          if (!user_id || !role_id) {
+            window.location.replace('index.html');
+          }
+          $.ajax({
+            url: "http://ec2-54-237-22-83.compute-1.amazonaws.com/buildings/user/" + user_id,
+            success: function (data) {
+              $.each(data, function(key, building){
+                $('#building-dropdown').append("<div class='item' data-value='" + building.building_id + "'>" + building.address + "</div>");
+              });
+            },
+            error: function (data) {
+            }
+          })
+          $("#building-select").dropdown({
+              onChange: function (val) {
+                $('#floor-select').removeClass('disabled');
+                $('#space-select').addClass('disabled').dropdown('clear');
+                $('#floor-dropdown').html('');
+                $('#floor-select').dropdown('clear');
+                $.ajax({
+                  url: "http://ec2-54-237-22-83.compute-1.amazonaws.com/locations/building/" + val,
+                  success: function (data) {
+                    var unique_floors = [];
+                    $.each(data, function(key, location){
+                      if ( $.inArray(location.floor, unique_floors) == -1 ) {
+                        unique_floors[key] = location.floor;
+                        $('#floor-dropdown').append("<div class='item' data-value='" + location.floor + "'>" + location.floor + "</div>");
+                      }
+                    });
+                  },
+                  error: function (data) {
+                  }
+                })
+              }
+          });
+          $("#floor-select").dropdown({
+              onChange: function (val) {
+                $('#space-select').removeClass('disabled').dropdown('clear');;
+                $('#space-dropdown').html('');
+                $.ajax({
+                  url: "http://ec2-54-237-22-83.compute-1.amazonaws.com/locations/building/" + $('#selected-building-id').val() + "/floor/" +val,
+                  success: function (data) {
+                    var unique_spaces = [];
+                    $.each(data, function(key, location){
+                      if ( $.inArray(location.space_name, unique_spaces) == -1 ) {
+                        unique_spaces[key] = location.space_name;
+                        $('#space-dropdown').append("<div class='item' data-value='" + location.location_id + "'>" + location.space_name + "</div>");
+                      }
+                    });
+                  },
+                  error: function (data) {
+                  }
+                })
+              }
+          });
+
+          $('.submit').click(function(){
+            $.ajax({
+              method: "POST",
+              url: "http://ec2-54-237-22-83.compute-1.amazonaws.com/devices",
+              data: {
+                device_name: $('#device-name').val(),
+                location_id: $('#space-select').dropdown('get value')
+              },
+              success: function (data) {
+                manageDevices();
+              },
+              error: function (data) {
+                window.location.replace('error.html');
+              }
+            });
+          });
+          $('.cancel').click(function(){
+            manageDevices();
+          });
+        });
+      </script>
+  </head>
+  <body bgcolor='#242624'>
+    <div class="ui top sidebar ui segment">
+      <div class="ui center aligned page grid">
+        <div class="one column row">
+          <div class="sixteen wide column">
+            <h3 class="ui header refresh">Refresh</h3>
+            <h3 id="logout"class="ui header">Logout</h3>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class='ui raised segment'>
+      <div class='ui teal dividing header'>
+        <i class='configure icon left'></i>
+        <div class='content left'>
+          Fix It Now!
+          <div class='sub header'>Crowd Sourced Facility Management</div>
+        </div>
+        <i class='sidebar icon right'></i>
+      </div>
+    </div>
+    <div id='main'>
+      <div class='ui stacked segment welcome'>
+        <a class="ui ribbon teal label">New Device</a>
+        <div class='ui form segment'>
+          <div class='field'>
+            <label>Device Name</label>
+            <input placeholder="Device Name" type="text" id='device-name'>
+          </div>
+          <div class='field'>
+            <label>Building</label>
+            <div class="ui selection dropdown" id='building-select' tabindex="0">
+              <div class="default text">Select</div>
+              <i class="dropdown icon"></i>
+              <input name="hidden-field" type="hidden" id='selected-building-id'>
+              <div class="menu transition hidden" id='building-dropdown' tabindex="-1" style="">
+              </div>
+            </div>
+          </div>
+          <div class='field' id='floor-field'>
+            <label>Floor</label>
+            <div class="ui selection dropdown disabled" id='floor-select' tabindex="0">
+              <div class="default text">Select</div>
+              <i class="dropdown icon"></i>
+              <input name="hidden-field" type="hidden" id='selected-floor'>
+              <div class="menu transition hidden" id='floor-dropdown' tabindex="-1" style="">
+              </div>
+            </div>
+          </div>
+          <div class='field' id='space-field'>
+            <label>Space</label>
+            <div class="ui selection dropdown disabled" id='space-select' tabindex="0">
+              <div class="default text">Select</div>
+              <i class="dropdown icon"></i>
+              <input name="hidden-field" type="hidden" id='selected-space'>
+              <div class="menu transition hidden" id='space-dropdown' tabindex="-1" style="">
+              </div>
+            </div>
+          </div>
+          <div class="ui submit button">Submit</div>
+          <div class="ui cancel button">Cancel</div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
