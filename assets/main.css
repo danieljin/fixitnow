@@ -28,7 +28,7 @@
     padding: 100px 0 !important;
 }
 
-.ui.piled.segment {
+.ui.raised.segment {
     position: fixed;
     width: 100%;
     z-index: 105 !important;
