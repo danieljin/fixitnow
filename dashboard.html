@@ -7,6 +7,7 @@
       <script src='assets/jquery.min.js'></script>
       <script src='assets/semantic.min.js'></script>
       <script src='assets/main.js'></script>
+      <script type="text/javascript" charset="utf-8" src="cordova.js"></script>
       <script>
         var pictureSource;   // picture source
         var destinationType; // sets the format of returned value
@@ -24,14 +25,18 @@
         function capturePhoto() {
           // Take picture using device camera and retrieve image as base64encoded string
           navigator.camera.getPicture(onPhotoDataSuccess, onFail, { quality: 50,
-            destinationType: destinationType.DATA_URL });
+            destinationType: destinationType.DATA_URL
+          });
         }
         // A button will call this function
         //
         function getPhoto(source) {
           // Retrieve image file location from specified source
-          navigator.camera.getPicture(onPhotoDataSuccess, onFail, { quality: 50,
-            destinationType: destinationType.DATA_URL});
+          navigator.camera.getPicture(onPhotoDataSuccess, onFail, {
+            quality: 50,
+            destinationType: destinationType.DATA_URL,
+            sourceType: source
+          });
         }
 
         // Called when a photo is successfully retrieved
