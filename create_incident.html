@@ -40,8 +40,8 @@
         // Called when a photo is successfully retrieved
         //
         function onPhotoDataSuccess(imageData) {
-          // Uncomment to view the base64-encoded image data
-          console.log(imageData);
+          $('#smallImage').show();
+          $('#smallImage img').attr("src", "data:image/jpeg;base64," + imageData);
         }
         // Called if something bad happens.
         //
@@ -113,6 +113,10 @@
           $('#album').click(function(){
             getPhoto(pictureSource.PHOTOLIBRARY);
           });
+          $('#smallImage .corner').click(function(){
+            $('#smallImage img').attr("src", "");
+            $('#smallImage').hide();
+          });
         });
       </script>
   </head>
@@ -131,7 +135,7 @@
         <i class='configure icon left'></i>
         <div class='content left'>
           Fix It Now!
-          <div class='sub header'>A Crowd Sourced Facility Management Tool</div>
+          <div class='sub header'>Crowd Sourced Facility Management</div>
         </div>
         <i class='sidebar icon right'></i>
       </div>
@@ -142,6 +146,12 @@
         <div class='ui form segment'>
           <div class='field'>
             <label>Add Photo</label>
+            <div id="smallImage" class="ui left floated tiny image">
+              <a class="ui right corner red label">
+                <i class="close icon"></i>
+              </a>
+              <img src=""></img><br>
+            </div>
             <div id="camera" class="ui labeled icon button">
                 <i class="camera icon"></i>
                 Capture Photo

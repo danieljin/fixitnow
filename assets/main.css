@@ -27,9 +27,7 @@
 }
 
 .ui.dividing.header {
-    -moz-column-count: 1;
-    -webkit-column-count: 1;
-    column-count: 1;
+    height: 50px;
 }
 
 #logout {
@@ -166,4 +164,12 @@ h3.ui.header>.icon {
 
 .me .front .user {
     background: antiquewhite !important;
+}
+
+#smallImage {
+    display:none;
+}
+
+#album {
+    margin-top: 10px;
 }
