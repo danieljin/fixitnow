@@ -24,7 +24,7 @@
                 $("#device-list").append("<div class='device view-building-button' id=" + device.device_id + ">" + device.device_name + "<div class='ui red delete button' id=" + device.device_id+ ">Delete</div></div>");
                 $("#device-list").append("<div class='ui inverted divider'></div>");
               });
-              $("#device-list").append("<div class='new device'><i class='add circle icon teal'></i>Register Device</div>");
+              $("#device-list").append("<div class='new device'><div class='ui teal button'><i class='add circle icon'></i>Register Device</div></div>");
               $('#loading').hide();
               $('.delete.button').click(function(e){
                 $.ajax({
