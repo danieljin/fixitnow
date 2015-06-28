@@ -71,7 +71,7 @@
                   }
                 }).then(function(){
                   $('.item .content:not(#add-new-incident) a.header').click(function(e){
-                    var incident_id = e.target.parentElement.id;
+                    incident_id = e.target.parentElement.id;
                     $.ajax({
                       url: "http://ec2-54-237-22-83.compute-1.amazonaws.com/incident/" + incident_id,
                       success: function (data) {
@@ -111,6 +111,21 @@
                         $('#reporter').html('<b>Reported By</b>: ' + data.reporter);
                         $('#assignee').html('<b>Worker Assigned</b>: ' + data.assignee);
                         $('.standard.modal').modal('show');
+
+                        $('.black.button').click(function(e){debugger;
+                          $.ajax({
+                            method: "POST",
+                            url: "http://ec2-54-237-22-83.compute-1.amazonaws.com/incident/" +  + "/assign/" + localStorage.getItem('user_id'),
+                            data: { user_name: username, password: password },
+                            success: function (data) {
+                              localStorage.setItem("user_id", data.user_id);
+                              localStorage.setItem("role", data.role);
+                              returnToDashboard();
+                            },
+                            error: function (data) {
+                            }
+                          });
+                        });
                       },
                       error: function (data) {
                       }
