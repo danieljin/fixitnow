@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+  <head>
+      <title>Login</title>
+      <link rel='stylesheet' type='text/css' href='assets/main.css'>
+      <link rel='stylesheet' type='text/css' href='assets/semantic.min.css'>
+      <script src='assets/jquery.min.js'></script>
+      <script src='assets/semantic.min.js'></script>
+      <script src='assets/main.js'></script>
+      <script>
+        $(function() {
+          $('.button').click(function(){
+            var username = $('#user_name').val(),
+                password = $('#password').val();
+
+            $.ajax({
+              method: "POST",
+              url: "http://ec2-54-237-22-83.compute-1.amazonaws.com/login",
+              data: { user_name: username, password: password },
+              success: function (data) {
+                localStorage.setItem("user_id", data.user_id);
+                localStorage.setItem("role", data.role);
+                returnToDashboard();
+              },
+              error: function (data) {
+              }
+            });
+          });
+        });
+      </script>
+  </head>
+  <body bgcolor='#242624'>
+    <div class='ui raised segment'>
+      <div class='ui teal dividing header'>
+        <i class='configure icon'></i>
+        <div class='content'>
+          Fix It Now!
+          <div class='sub header'>Crowd Sourced Facility Management</div>
+        </div>
+      </div>
+    </div>
+    <div id='main'>
+      <div class='ui stacked segment welcome'>
+        <a class="ui ribbon teal label">Login</a>
+        <div class='ui input'>
+          <input id="user_name" class='prompt' type='text' placeholder='User Name' autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+        </div>
+        <br>
+        <div class='ui input'>
+          <input id="password" class='prompt' type='password' placeholder='Password' />
+        </div>
+        <br><br>
+        <div class="ui teal button">
+          <i class="sign in icon"></i> Sign In
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

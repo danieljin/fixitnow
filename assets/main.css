@@ -1,0 +1,217 @@
+@media (max-width:600px) {
+    #reset, #roman{
+        margin-left: 10px;
+    }
+
+    .segment {
+        border-radius: 0px !important;
+    }
+
+    .ui.dividing.header {
+        font-size: small !important;
+        margin-top: 10px !important;
+    }
+    .ui.piled.segment:after, .ui.piled.segment:before {
+        visibility: hidden !important;
+    }
+
+    #upload {
+        display: none;
+    }
+}
+
+@media (min-width:600px) {
+    #main {
+        margin: 0 auto;
+        width: 90%;
+        max-width: 600px;
+    }
+
+    #camera, #album {
+        display: none;
+    }
+}
+
+#main {
+    padding: 100px 0 !important;
+}
+
+.ui.raised.segment {
+    position: fixed;
+    width: 100%;
+    z-index: 105 !important;
+    top: 0px;
+}
+
+.ui.dividing.header {
+    height: 50px;
+}
+
+#logout {
+    cursor: pointer;
+}
+
+.left {
+    float: left;
+}
+
+.right {
+    float: right;
+}
+
+.segment {
+    margin: 0px !important;
+}
+
+.user {
+    margin: 10px 10px 10px !important;
+    width: 60px;
+    height: 90px;
+    text-align: center;
+}
+
+.user.red {
+    background-color: #d95c5c !important;
+}
+
+.ribbon {
+    top: -6px;
+}
+
+#container {
+    min-height: 100px;
+}
+
+.item.disabled {
+    pointer-events: none;
+    cursor: default;
+}
+
+.button .icon.thumbs {
+    margin: 0 !important;
+}
+
+.welcome .input {
+    margin-top: 20px;
+    width: 100%;
+}
+
+.welcome #upload {
+    margin-top: 0px;
+}
+
+.welcome input {
+    width: 100%;
+}
+
+i.reply {
+    margin-left: 20px !important;
+    margin-top: -35px !important;
+    color: #c8c8c8;
+    cursor: pointer !important;
+}
+
+i.reply:hover{
+    color: #00b5ad;
+}
+
+#loading {
+    position: absolute;
+    left: 0;
+    top: -100px;
+    bottom: -100px;
+    right: 0;
+    background: #000;
+    opacity: 0.8;
+    z-index: 9999;
+    filter: alpha(opacity=80);
+}
+
+.corner {
+    opacity: 0.8;
+    filter: alpha(opacity=80);
+    top: -2px !important;
+}
+
+.ui.toggle.checkbox input[type=radio]:not(:checked)~label:before {
+    background-color: #00b5ad !important;
+}
+
+.ui.toggle.checkbox input[type=radio]:checked~label:before {
+    background-color: #d95c5c !important;
+}
+
+.toggle.checkbox {
+    float: right;
+}
+
+#roman {
+    padding-bottom: 10px;
+}
+
+.hidden {
+    display: none !important;
+}
+
+h3.ui.header {
+    margin-top: 15px !important;
+}
+
+h3.ui.header>.icon {
+    display: table-cell !important;
+    margin: 0 !important;
+    font-size: 28px !important;
+}
+
+.holder {
+    text-align: center;
+}
+
+.name {
+    max-width: 80px;
+    min-width: 30px;
+    text-overflow: clip;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.name * {
+    display: inline
+}
+
+.name br{
+    display: none
+}
+
+.me .front .user {
+    background: antiquewhite !important;
+}
+
+#smallImage {
+    display:none;
+}
+
+#album {
+    margin-top: 10px;
+}
+
+.ui.items {
+  margin: 0 !important;
+}
+
+.map-summary {
+    width: 100%;
+}
+
+.refresh {
+    cursor: pointer;
+}
+
+.delete {
+    float: right;
+    margin-top: -9px !important;
+}
+
+.manage-devices {
+    cursor: pointer;
+}

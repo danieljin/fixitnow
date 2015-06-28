@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html>
+  <head>
+      <title>Dashboard</title>
+      <link rel='stylesheet' type='text/css' href='assets/main.css'>
+      <link rel='stylesheet' type='text/css' href='assets/semantic.min.css'>
+      <script src='assets/jquery.min.js'></script>
+      <script src='assets/semantic.min.js'></script>
+      <script src='assets/main.js'></script>
+      <script type="text/javascript" charset="utf-8" src="cordova.js"></script>
+      <script>
+        var pictureSource;   // picture source
+        var destinationType; // sets the format of returned value
+
+        // Wait for device API libraries to load
+        //
+        document.addEventListener("deviceready",onDeviceReady,false);
+
+        // device APIs are available
+        //
+        function onDeviceReady() {
+            pictureSource=navigator.camera.PictureSourceType;
+            destinationType=navigator.camera.DestinationType;
+        }
+        function capturePhoto() {
+          // Take picture using device camera and retrieve image as base64encoded string
+          navigator.camera.getPicture(onPhotoDataSuccess, onFail, { quality: 50,
+            destinationType: destinationType.DATA_URL
+          });
+        }
+        // A button will call this function
+        //
+        function getPhoto(source) {
+          // Retrieve image file location from specified source
+          navigator.camera.getPicture(onPhotoDataSuccess, onFail, {
+            quality: 50,
+            destinationType: destinationType.DATA_URL,
+            sourceType: source
+          });
+        }
+
+        // Called when a photo is successfully retrieved
+        //
+        function onPhotoDataSuccess(imageData) {
+          $('#smallImage').show();
+          $('#smallImage img').attr("src", "data:image/jpeg;base64," + imageData);
+        }
+        // Called if something bad happens.
+        //
+        function onFail(message) {
+        }
+        function previewFile() {
+          var preview = $('#smallImage img')[0];
+          var file    = $('input[type=file]')[0].files[0];
+          var reader  = new FileReader();
+
+          reader.onloadend = function () {
+            preview.src = reader.result;
+            $('#smallImage').show();
+          }
+
+          if (file) {
+            reader.readAsDataURL(file);
+          } else {
+            preview.src = "";
+          }
+        }
+        function reset_input_file(input) {
+            input.replaceWith(input.val('').clone(true));
+        };
+
+        $(function(){
+          var user_id     = localStorage.getItem('user_id'),
+              role        = localStorage.getItem('role');
+          if (!user_id) {
+            window.location.replace('index.html');
+          }
+
+          if (!role) {
+            window.location.replace('index.html');
+          } else {
+            var url;
+            if (role == 1) {
+              url = 'http://ec2-54-237-22-83.compute-1.amazonaws.com/incident/user/';
+              $('a.active.item').html('My Incidents');
+            } else if (role == 2) {
+              url = 'http://ec2-54-237-22-83.compute-1.amazonaws.com/incident/worker/';
+              $('a.active.item').html('My Incidents');
+            } else if (role == 3) {
+              url = 'http://ec2-54-237-22-83.compute-1.amazonaws.com/incident/unassigned/';
+              $('a.active.item').html('Unassigned Incidents');
+            }
+            $.ajax({
+              url: url + user_id,
+              success: function (data) {
+                $("#incident-list-my").append('<div class="link item"><div id="add-new-incident" class="content"><a class="header"><i class="huge add circle icon teal"></i>Create a New Incident</a></div>');
+                $.each(data, function(key, incident){
+                  if (!incident.image) {
+                    incident.image = 'assets/image.png'
+                  }
+                  $("#incident-list-my").append('<div class="link item"> <div class="ui tiny image"> <img src="' + incident.image +'"> </div><div id=' + incident.incident_id + ' class="content"><a class="header">' + incident.address + '</a><div class="meta"><b>Status:</b>' + incident.status + '<br><b>Reported:</b> ' + incident.date_reported +'</div><div class="description">' + incident.description + '</div></div>');
+                });
+                $('#add-new-incident').click(function(e){
+                  window.location.replace('create_incident.html');
+                });
+              },
+              error: function (data) {
+                window.location.replace('error.html');
+              }
+            }).then(function(){
+              $.ajax({
+                url: "http://ec2-54-237-22-83.compute-1.amazonaws.com/incident/all/" + user_id,
+                success: function (data) {
+                  $("#incident-list-all").append('<div class="link item"><div id="add-new-incident-2" class="content"><a class="header"><i class="huge add circle icon teal"></i>Create a New Incident</a></div>');
+                  $.each(data, function(key, incident){
+                    if (!incident.image) {
+                      incident.image = 'assets/image.png'
+                    }
+                    $("#incident-list-all").append('<div class="link item"> <div class="ui tiny image"> <img src="' + incident.image +'"> </div><div id=' + incident.incident_id + ' class="content"><a class="header">' + incident.address + '</a><div class="meta"><b>Status:</b>' + incident.status + '<br><b>Reported:</b> ' + incident.date_reported +'</div><div class="description">' + incident.description + '</div></div>');
+                  });
+                  $('#add-new-incident-2').click(function(e){
+                    window.location.replace('create_incident.html');
+                  });
+                },
+                error: function (data) {
+                  window.location.replace('error.html');
+                }
+              }).then(function(){
+                $.ajax({
+                  url: "http://ec2-54-237-22-83.compute-1.amazonaws.com/buildings/user/" + user_id,
+                  success: function (data) {
+                    $.each(data, function(key, building){
+                      $('#building-dropdown').append("<div class='item' data-value='" + building.building_id + "'>" + building.address + "</div>");
+                    });
+                  },
+                  error: function (data) {
+                  }
+                }).then(function(){
+                  $('.item .content:not(#add-new-incident) a.header').click(function(e){
+                    incident_id = e.target.parentElement.id;
+                    $.ajax({
+                      url: "http://ec2-54-237-22-83.compute-1.amazonaws.com/incident/" + incident_id,
+                      success: function (data) {
+                        if (!data.image) {
+                          data.image = 'assets/image.png';
+                        }
+
+                        $('#worker-buttons').addClass('hidden');
+
+                        if (data.assignee_id == localStorage.getItem('user_id')) {
+                          $('.black.button').addClass('hidden');
+                        } else if (!data.assignee_id) {
+                          $('.black.button').removeClass('hidden');
+                          if (localStorage.getItem('role') == 2) {
+                            $('#worker-buttons').removeClass('hidden');
+                          }
+                        }
+
+                        if (data.assignee_id != localStorage.getItem('user_id')) {
+                          $('.positive.button').addClass('hidden');
+                        } else if (data.assignee_id == localStorage.getItem('user_id') && parseInt(data.status_id) < 2) {
+                          $('.positive.button').removeClass('hidden');
+                          if (localStorage.getItem('role') == 2) {
+                            $('#worker-buttons').removeClass('hidden');
+                          }
+                        }
+
+                        if (localStorage.getItem('role') == 3) {
+                          $('#priority-field').removeClass('hidden');
+                          $('.black.button').addClass('hidden');
+                          if (parseInt(data.status_id) < 2) {
+                            $('#worker-buttons').removeClass('hidden');
+                            $('.positive.button').removeClass('hidden');
+                          } else {
+                            $('.positive.button').addClass('hidden');
+                            $('#worker-buttons').addClass('hidden');
+                          }
+                        }
+
+                        $('.ui.standard.modal img')[0].src = data.image;
+                        $('#description').html('<b>Description</b>: ' + data.description);
+                        $('#address').html('<b>Address</b>: ' + data.address);
+                        $('#floor').html('<b>Floor</b>: ' + data.floor);
+                        $('#space').html('<b>Space</b>: ' + data.space_name);
+                        $('#status').html('<b>Status</b>: ' + data.status);
+                        $('#date_reported').html('<b>Date Reported</b>: ' + data.date_reported);
+                        $('#date_expected').html('<b>Date Expected</b>: ' + data.date_expected);
+                        $('#date_resolved').html('<b>Date Resolved</b>: ' + data.date_resolved);
+                        $('#reporter').html('<b>Reported By</b>: ' + data.reporter);
+                        $('#assignee').html('<b>Worker Assigned</b>: ' + data.assignee);
+                        $('.standard.modal').modal('show');
+
+                        $('.black.button').click(function(e){
+                          $.ajax({
+                            method: "POST",
+                            url: "http://ec2-54-237-22-83.compute-1.amazonaws.com/incident/" + incident_id + "/assign/" + localStorage.getItem('user_id'),
+                            success: function (data) {
+                              location.reload();
+                            },
+                            error: function (data) {
+                            }
+                          });
+                        });
+                        $('.positive.button').click(function(e){
+                          e.preventDefault();
+                          $('.resolve.modal').modal('show');
+                        });
+                      },
+                      error: function (data) {
+                      }
+                    });
+                  });
+
+                  $('#loading').hide();
+                });
+              });
+            });
+            $('.tabular .item').click(function(){
+              $('.active').removeClass('active');
+              $(this).addClass('active');
+              if (this.text.trim() == 'All Incidents') {
+                $('#incident-list-my').addClass('hidden');
+                $('#incident-list-all').removeClass('hidden');
+                $('#map-view').addClass('hidden');
+              } else if(this.text.trim() == 'My Incidents' || this.text.trim() == 'Unassigned Incidents') {
+                $('#incident-list-all').addClass('hidden');
+                $('#incident-list-my').removeClass('hidden');
+                $('#map-view').addClass('hidden');
+              } else if(this.text.trim() == 'Map') {
+                $('#incident-list-all').addClass('hidden');
+                $('#incident-list-my').addClass('hidden');
+                $('#map-view').removeClass('hidden');
+              }
+            });
+
+            $('#smallImage .corner').click(function(){
+              $('#smallImage img').attr("src", "");
+              reset_input_file($('#upload input'));
+              $('#smallImage').hide();
+            });
+
+            $('#camera').click(function(){
+              capturePhoto();
+            });
+            $('#album').click(function(){
+              getPhoto(pictureSource.PHOTOLIBRARY);
+            });
+
+            $('.save.button').click(function(e){
+              e.preventDefault();
+              var image_src;
+              if ($('#smallImage img')[0].src.length > 500) {
+                image_src = $('#smallImage img')[0].src;
+              }
+              $.ajax({
+                method: "POST",
+                url: "http://ec2-54-237-22-83.compute-1.amazonaws.com/resolve/" + incident_id,
+                data: {
+                  status: $('#status-select').dropdown('get value'),
+                  priority: $('#priority-select').dropdown('get value'),
+                  image: image_src
+                },
+                success: function (data) {
+                  location.reload();
+                },
+                error: function (data) {
+                  window.location.replace('error.html');
+                }
+              });
+            });
+
+            $('.ui.dropdown').dropdown();
+            $("#building-select").dropdown({
+              onChange: function (val) {
+                $.ajax({
+                  url: "http://ec2-54-237-22-83.compute-1.amazonaws.com/locations/building/" + val,
+                  success: function (data) {
+                    var unique_floor_plans = [];
+                    $.each(data, function(key, building){
+                      unique_floor_plans[building.floor] = building.floor_plan;
+                    });
+                    var images = '';
+                    if (unique_floor_plans.length > 0){
+                      images = '<div class="ui center aligned segment">';
+                      $.each(unique_floor_plans, function(key, plan){
+                        if(unique_floor_plans[key]) {
+                          images = images + '<div><h2>Floor: ' + key + '</h2><img src=' + unique_floor_plans[key] + ' class="map-summary"></div>';
+                        }
+                      });
+                      images = images + "</div>"
+                    }
+                    $('#map-contents').html(images);
+                  },
+                  error: function (data) {
+                    window.location.replace('error.html');
+                  }
+                });
+              }
+            });
+          }
+        });
+      </script>
+  </head>
+  <body bgcolor='#242624'>
+    <div class="ui top sidebar ui segment">
+      <div class="ui center aligned page grid">
+        <div class="one column row">
+          <div class="sixteen wide column">
+            <h3 class="ui header manage-devices"></h3>
+            <h3 class="ui header refresh">Refresh</h3>
+            <h3 id="logout" class="ui header">Logout</h3>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="ui standard modal transition">
+      <i class="close icon"></i>
+      <div class="header">Incident</div>
+      <div class="content">
+        <div class="ui medium image">
+          <img src="">
+        </div>
+        <div class="description">
+          <div id="description" class="ui header"></div>
+          <div id="address"></div>
+          <div id="floor"></div>
+          <div id="space"></div>
+          <div id="status"></div>
+          <div id="date_reported"></div>
+          <div id="date_expected"></div>
+          <div id="date_resolved"></div>
+          <div id="reporter"></div>
+          <div id="assignee"></div>
+        </div>
+      </div>
+      <div id="worker-buttons" class="actions hidden">
+        <div class="ui black button">
+          Assign to Me
+        </div>
+        <div class="ui positive button">
+          Manage Incident
+        </div>
+      </div>
+    </div>
+    <div class="ui resolve modal transition">
+      <i class="close icon"></i>
+      <div class="header">Manage Incident</div>
+      <div class="content">
+        <div class='field'>
+          <label>Status:</label><br>
+          <div id="status-select" class="ui selection dropdown" tabindex="0">
+            <div class="default text">Select</div>
+            <i class="dropdown icon"></i>
+            <input name="hidden-field" type="hidden">
+            <div class="menu transition hidden" tabindex="-1" style="">
+              <div data-value="0" class="item">Pending</div>
+              <div data-value="1" class="item">In Progress</div>
+              <div data-value="2" class="item">Resolved</div>
+              <div data-value="3" class="item">Not an Issue</div>
+              <div data-value="4" class="item">Will Not Fix</div>
+            </div>
+          </div>
+        </div>
+        <br>
+        <div id='priority-field' class='field hidden'>
+          <label>Priority:</label><br>
+          <div id="priority-select" class="ui selection dropdown" tabindex="0">
+            <div class="default text">Select</div>
+            <i class="dropdown icon"></i>
+            <input name="hidden-field" type="hidden">
+            <div class="menu transition hidden" tabindex="-1" style="">
+              <div data-value="0" class="item">0</div>
+              <div data-value="1" class="item">1</div>
+              <div data-value="2" class="item">2</div>
+              <div data-value="3" class="item">3</div>
+              <div data-value="4" class="item">4</div>
+              <div data-value="5" class="item">5</div>
+            </div>
+          </div>
+        </div>
+        <br>
+        <div id='photo-picker' class='field'>
+          <label>Add Photo:</label><br> 
+          <div id="upload" class="ui icon input">
+            <input type="file" onchange="previewFile()">
+          </div>
+          <div id="camera" class="ui labeled icon button">
+            <i class="camera icon"></i>
+            Capture Photo
+          </div>
+          <div id="album" class="ui labeled icon button">
+            <i class="picture icon"></i>
+            Add From Photo Library
+          </div>
+          <br><br>
+          <div id="smallImage" class="ui tiny image">
+            <a class="ui right corner red label">
+              <i class="close icon"></i>
+            </a>
+            <img src=""></img>
+          </div>
+        </div>
+      </div>
+      <div class="actions">
+        <div class="ui save teal button">
+          Save
+        </div>
+      </div>
+    </div>
+    <div class='ui raised segment'>
+      <div class='ui teal dividing header'>
+        <i class='configure icon left'></i>
+        <div class='content left'>
+          Fix It Now!
+          <div class='sub header'>Crowd Sourced Facility Management</div>
+        </div>
+        <i class='sidebar icon right'></i>
+      </div>
+    </div>
+    <div id="loading">
+      <div class="ui active dimmer">
+        <div class="ui indeterminate text active loader">
+          Loading...
+        </div>
+      </div>
+    </div>
+    <div id='main'>
+      <div class="ui top attached tabular menu">
+        <a class="active item">
+        </a>
+        <a class="item">
+          All Incidents
+        </a>
+        <a class="item">
+          Map
+        </a>
+      </div>
+      <div class='ui stacked segment welcome'>
+        <div id="incident-list-my" class='ui divided items'>
+        </div>
+        <div id="incident-list-all" class='ui divided items hidden'>
+        </div>
+        <div id="map-view" class='ui form segment hidden'>
+          <div class='field'>
+            <label>Building</label>
+            <div class="ui selection dropdown" id='building-select' tabindex="0">
+              <div class="default text">Select</div>
+              <i class="dropdown icon"></i>
+              <input name="hidden-field" type="hidden" id='selected-building-id'>
+              <div class="menu transition hidden" id='building-dropdown' tabindex="-1" style="">
+              </div>
+            </div>
+          </div>
+          <div id='map-contents'>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
