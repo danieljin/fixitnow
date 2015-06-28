@@ -41,14 +41,14 @@
               $.ajax({
                 url: "http://ec2-54-237-22-83.compute-1.amazonaws.com/incident/all/" + user_id,
                 success: function (data) {
-                  $("#incident-list-all").append('<div class="link item"><div id="add-new-incident" class="content"><a class="header"><i class="huge add circle icon teal"></i>Create a New Incident</a></div>');
+                  $("#incident-list-all").append('<div class="link item"><div id="add-new-incident-2" class="content"><a class="header"><i class="huge add circle icon teal"></i>Create a New Incident</a></div>');
                   $.each(data, function(key, incident){
                     if (!incident.image) {
                       incident.image = 'assets/image.png'
                     }
                     $("#incident-list-all").append('<div class="link item"> <div class="ui tiny image"> <img src="' + incident.image +'"> </div><div id=' + incident.incident_id + ' class="content"><a class="header">' + incident.address + '</a><div class="meta"><b>Status:</b>' + incident.status + '<br><b>Reported:</b> ' + incident.date_reported +'<br><b>Assigned To:</b> ' + (incident.assignee ? (incident.assignee_id == user_id ? 'Me' : incident.assignee) : 'Unassigned') + '</div><div class="description">' + incident.description + '</div></div>');
                   });
-                  $('#add-new-incident').click(function(e){
+                  $('#add-new-incident-2').click(function(e){
                     window.location.replace('create_incident.html');
                   });
                 },
