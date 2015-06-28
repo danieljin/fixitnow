@@ -59,11 +59,22 @@
                   $('.new-building-button').click(function(e){
                     window.location.replace('create_incident.html');
                   });
-                  $('#loading').hide();
                 },
                 error: function (data) {
                   window.location.replace('error.html');
                 }
+              }).then(function(){
+                $.ajax({
+                  url: "http://ec2-54-237-22-83.compute-1.amazonaws.com/buildings/user/" + user_id,
+                  success: function (data) {
+                    $.each(data, function(key, building){
+                      $('#building-dropdown').append("<div class='item' data-value='" + building.building_id + "'>" + building.address + "</div>");
+                    });
+                    $('#loading').hide();
+                  },
+                  error: function (data) {
+                  }
+                });
               });
             });
             $('.item').click(function(){
@@ -84,16 +95,6 @@
               }
             });
             $('.ui.dropdown').dropdown();
-            $.ajax({
-              url: "http://ec2-54-237-22-83.compute-1.amazonaws.com/buildings/user/" + user_id,
-              success: function (data) {
-                $.each(data, function(key, building){
-                  $('#building-dropdown').append("<div class='item' data-value='" + building.building_id + "'>" + building.address + "</div>");
-                });
-              },
-              error: function (data) {
-              }
-            });
             $("#building-select").dropdown({
               onChange: function (val) {
                 $.ajax({
