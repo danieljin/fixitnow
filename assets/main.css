@@ -173,3 +173,7 @@ h3.ui.header>.icon {
 #album {
     margin-top: 10px;
 }
+
+#upload, #camera, #album, #photo-picker {
+    display: none;
+}

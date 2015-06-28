@@ -47,6 +47,25 @@
         //
         function onFail(message) {
         }
+        function previewFile() {
+          var preview = $('#smallImage img')[0];
+          var file    = $('input[type=file]')[0].files[0];
+          var reader  = new FileReader();
+
+          reader.onloadend = function () {
+            preview.src = reader.result;
+            $('#smallImage').show();
+          }
+
+          if (file) {
+            reader.readAsDataURL(file);
+          } else {
+            preview.src = "";
+          }
+        }
+        function reset_input_file(input) {
+            input.replaceWith(input.val('').clone(true));
+        };
         $(function() {
           $('.ui.dropdown').dropdown();
           var user_id = localStorage.getItem('user_id');
@@ -107,16 +126,26 @@
               }
           });
 
-          $('#camera').click(function(){
-            capturePhoto();
-          });
-          $('#album').click(function(){
-            getPhoto(pictureSource.PHOTOLIBRARY);
-          });
           $('#smallImage .corner').click(function(){
             $('#smallImage img').attr("src", "");
+            reset_input_file($('#upload input'));
             $('#smallImage').hide();
           });
+
+          if (navigator.camera) {
+            $('#camera').show();
+            $('#album').show();
+            $('#photo-picker').show();
+            $('#camera').click(function(){
+              capturePhoto();
+            });
+            $('#album').click(function(){
+              getPhoto(pictureSource.PHOTOLIBRARY);
+            });
+          } else {
+            $('#upload').show();
+            $('#photo-picker').show();
+          }
         });
       </script>
   </head>
@@ -144,7 +173,7 @@
       <div class='ui stacked segment welcome'>
         <a class="ui ribbon teal label">New Incident</a>
         <div class='ui form segment'>
-          <div class='field'>
+          <div id='photo-picker' class='field'>
             <label>Add Photo</label>
             <div id="smallImage" class="ui left floated tiny image">
               <a class="ui right corner red label">
@@ -152,13 +181,16 @@
               </a>
               <img src=""></img><br>
             </div>
+            <div id="upload" class="ui icon input">
+              <input type="file" onchange="previewFile()">
+            </div>
             <div id="camera" class="ui labeled icon button">
-                <i class="camera icon"></i>
-                Capture Photo
+              <i class="camera icon"></i>
+              Capture Photo
             </div>
             <div id="album" class="ui labeled icon button">
-                <i class="picture icon"></i>
-                Add From Photo Library
+              <i class="picture icon"></i>
+              Add From Photo Library
             </div>
           </div>
           <div class='field'>
