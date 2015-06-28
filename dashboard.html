@@ -86,7 +86,7 @@
 
                         $('#worker-buttons').addClass('hidden');
 
-                        if (data.assignee_id == localStorage.getItem('user_id') && parseInt(data.status_id) > 0) {
+                        if (data.assignee_id == localStorage.getItem('user_id')) {
                           $('.black.button').addClass('hidden');
                         } else if (!data.assignee_id) {
                           $('.black.button').removeClass('hidden');
@@ -130,6 +130,7 @@
                         });
                         $('.positive.button').click(function(e){
                           e.preventDefault();
+                          $('.resolve.modal').modal('show');
                         });
                       },
                       error: function (data) {
@@ -141,7 +142,7 @@
                 });
               });
             });
-            $('.item').click(function(){
+            $('.tabular .item').click(function(){
               $('.active').removeClass('active');
               $(this).addClass('active');
               if (this.text.trim() == 'All Incidents') {
@@ -166,6 +167,46 @@
                 $('#summary-view').removeClass('hidden');
               }
             });
+
+            $('#smallImage .corner').click(function(){
+              $('#smallImage img').attr("src", "");
+              reset_input_file($('#upload input'));
+              $('#smallImage').hide();
+            });
+
+            if (navigator.camera) {
+              $('#camera').show();
+              $('#album').show();
+              $('#photo-picker').show();
+              $('#camera').click(function(){
+                capturePhoto();
+              });
+              $('#album').click(function(){
+                getPhoto(pictureSource.PHOTOLIBRARY);
+              });
+            } else {
+              $('#upload').show();
+              $('#photo-picker').show();
+            }
+
+            $('.save.button').click(function(e){
+              e.preventDefault();
+              $.ajax({
+                method: "POST",
+                url: "http://ec2-54-237-22-83.compute-1.amazonaws.com/resolve/" + incident_id,
+                data: {
+                  status: $('#status-select').dropdown('get value'),
+                  image: $('img')[0].src
+                },
+                success: function (data) {
+                  location.reload();
+                },
+                error: function (data) {
+                  window.location.replace('error.html');
+                }
+              });
+            });
+
             $('.ui.dropdown').dropdown();
             $("#building-select").dropdown({
               onChange: function (val) {
@@ -236,6 +277,54 @@
         </div>
         <div class="ui positive button">
           Resolve Incident
+        </div>
+      </div>
+    </div>
+    <div class="ui resolve modal transition">
+      <i class="close icon"></i>
+      <div class="header">Resolve Incident</div>
+      <div class="content">
+        <div class='field'>
+          <label>Status:</label><br>
+          <div id="status-select" class="ui selection dropdown" tabindex="0">
+            <div class="default text">Select</div>
+            <i class="dropdown icon"></i>
+            <input name="hidden-field" type="hidden">
+            <div class="menu transition hidden" tabindex="-1" style="">
+              <div data-value="0" class="item">Pending</div>
+              <div data-value="1" class="item">In Progress</div>
+              <div data-value="2" class="item">Resolved</div>
+              <div data-value="3" class="item">Not an Issue</div>
+              <div data-value="4" class="item">Will Not Fix</div>
+            </div>
+          </div>
+        </div>
+        <br>
+        <div id='photo-picker' class='field'>
+          <label>Add Photo:</label>
+          <div id="upload" class="ui icon input">
+            <input type="file" onchange="previewFile()">
+          </div>
+          <div id="camera" class="ui labeled icon button">
+            <i class="camera icon"></i>
+            Capture Photo
+          </div>
+          <div id="album" class="ui labeled icon button">
+            <i class="picture icon"></i>
+            Add From Photo Library
+          </div>
+          <br>
+          <div id="smallImage" class="ui left floated tiny image">
+            <a class="ui right corner red label">
+              <i class="close icon"></i>
+            </a>
+            <img src=""></img><br>
+          </div>
+        </div>
+      </div>
+      <div class="actions">
+        <div class="ui save teal button">
+          Save
         </div>
       </div>
     </div>
