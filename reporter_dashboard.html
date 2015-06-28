@@ -68,11 +68,28 @@
               if (this.text.trim() == 'All Issues') {
                 $('#incident-list-my').addClass('hidden');
                 $('#incident-list-all').removeClass('hidden');
+                $('#map-view').addClass('hidden');
               } else if(this.text.trim() == 'My Issues') {
                 $('#incident-list-all').addClass('hidden');
                 $('#incident-list-my').removeClass('hidden');
+                $('#map-view').addClass('hidden');
+              } else if(this.text.trim() == 'Summary') {
+                $('#incident-list-all').addClass('hidden');
+                $('#incident-list-my').addClass('hidden');
+                $('#map-view').removeClass('hidden');
               }
             });
+            $('.ui.dropdown').dropdown();
+            $.ajax({
+              url: "http://ec2-54-237-22-83.compute-1.amazonaws.com/buildings/user/" + user_id,
+              success: function (data) {
+                $.each(data, function(key, building){
+                  $('#building-dropdown').append("<div class='item' data-value='" + building.building_id + "'>" + building.address + "</div>");
+                });
+              },
+              error: function (data) {
+              }
+            })
           }
         });
       </script>
@@ -112,12 +129,27 @@
         <a class="item">
           All Issues
         </a>
+        <a class="item">
+          Summary
+        </a>
       </div>
       <div class='ui stacked segment welcome'>
         <a class="ui ribbon teal label">My Issues</a>
         <div id="incident-list-my" class='ui divided items'>
         </div>
         <div id="incident-list-all" class='ui divided items hidden'>
+        </div>
+        <div id="map-view" class='ui form segment hidden'>
+          <div class='field'>
+            <label>Building</label>
+            <div class="ui selection dropdown" id='building-select' tabindex="0">
+              <div class="default text">Select</div>
+              <i class="dropdown icon"></i>
+              <input name="hidden-field" type="hidden" id='selected-building-id'>
+              <div class="menu transition hidden" id='building-dropdown' tabindex="-1" style="">
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
