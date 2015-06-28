@@ -20,9 +20,9 @@
           } else {
             var url;
             if (role == 1) {
-              url = 'http://ec2-54-237-22-83.compute-1.amazonaws.com/incident/user/'
+              url = 'http://ec2-54-237-22-83.compute-1.amazonaws.com/incident/user/';
             } else if (role == 2) {
-              url = 'http://ec2-54-237-22-83.compute-1.amazonaws.com/incident/worker/'
+              url = 'http://ec2-54-237-22-83.compute-1.amazonaws.com/incident/worker/';
             }
             $.ajax({
               url: url + user_id,
@@ -78,6 +78,23 @@
                         if (!data.image) {
                           data.image = 'assets/image.png';
                         }
+
+                        $('#worker-buttons').addClass('hidden');
+
+                        if (data.assignee_id == localStorage.getItem('user_id') && parseInt(data.status_id) > 0) {
+                          $('.black.button').addClass('hidden');
+                        } else if (!data.assignee_id) {
+                          $('.black.button').removeClass('hidden');
+                          $('#worker-buttons').removeClass('hidden');
+                        }
+
+                        if (data.assignee_id != localStorage.getItem('user_id')) {
+                          $('.positive.button').addClass('hidden');
+                        } else if (data.assignee_id == localStorage.getItem('user_id') && parseInt(data.status_id) < 2) {
+                          $('.positive.button').removeClass('hidden');
+                          $('#worker-buttons').removeClass('hidden');
+                        }
+
                         $('.ui.standard.modal img')[0].src = data.image;
                         $('#description').html('<b>Description</b>: ' + data.description);
                         $('#address').html('<b>Address</b>: ' + data.address);
@@ -87,6 +104,8 @@
                         $('#date_reported').html('<b>Date Reported</b>: ' + data.date_reported);
                         $('#date_expected').html('<b>Date Expected</b>: ' + data.date_expected);
                         $('#date_resolved').html('<b>Date Resolved</b>: ' + data.date_resolved);
+                        $('#reporter').html('<b>Reported By</b>: ' + data.reporter);
+                        $('#assignee').html('<b>Worker Assigned</b>: ' + data.assignee);
                         $('.standard.modal').modal('show');
                       },
                       error: function (data) {
@@ -183,6 +202,16 @@
           <div id="date_reported"></div>
           <div id="date_expected"></div>
           <div id="date_resolved"></div>
+          <div id="reporter"></div>
+          <div id="assignee"></div>
+        </div>
+      </div>
+      <div id="worker-buttons" class="actions hidden">
+        <div class="ui black button">
+          Assign to Me
+        </div>
+        <div class="ui positive button">
+          Resolve Incident
         </div>
       </div>
     </div>
