@@ -234,20 +234,12 @@
               $('#smallImage').hide();
             });
 
-            if (pictureSource) {
-              $('#camera').show();
-              $('#album').show();
-              $('#photo-picker').show();
-              $('#camera').click(function(){
-                capturePhoto();
-              });
-              $('#album').click(function(){
-                getPhoto(pictureSource.PHOTOLIBRARY);
-              });
-            } else {
-              $('#upload').show();
-              $('#photo-picker').show();
-            }
+            $('#camera').click(function(){
+              capturePhoto();
+            });
+            $('#album').click(function(){
+              getPhoto(pictureSource.PHOTOLIBRARY);
+            });
 
             $('.save.button').click(function(e){
               e.preventDefault();
