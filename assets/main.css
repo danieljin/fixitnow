@@ -15,7 +15,7 @@
         visibility: hidden !important;
     }
 
-    #photo-picker #upload {
+    #upload {
         display: none;
     }
 }
@@ -27,7 +27,7 @@
         max-width: 600px;
     }
 
-    #photo-picker #camera, #photo-picker #album {
+    #camera, #album {
         display: none;
     }
 }
