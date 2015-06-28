@@ -194,3 +194,7 @@ h3.ui.header>.icon {
     float: right;
     margin-top: -9px !important;
 }
+
+.manage-devices {
+    cursor: pointer;
+}

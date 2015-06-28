@@ -29,7 +29,7 @@ $(function() {
 
   if ( localStorage.getItem('role') == 3) {
     $('.manage-devices').click(function() {
-      location.reload();
+      window.location.replace('devices.html');
     });
     $('.manage-devices').html('Manage Devices');
   }
