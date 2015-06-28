@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+  <head>
+      <title>My Issues</title>
+      <link rel='stylesheet' type='text/css' href='assets/main.css'>
+      <link rel='stylesheet' type='text/css' href='assets/semantic.min.css'>
+      <script src='assets/jquery.min.js'></script>
+      <script src='assets/semantic.min.js'></script>
+      <script src='assets/main.js'></script>
+      <script>
+        $(function(){
+          var user_id     = localStorage.getItem('user_id'),
+              role        = localStorage.getItem('role');
+          if (!user_id) {
+            window.location.replace('index.html');
+          }
+          if (!role) {
+            window.location.replace('index.html');
+          } else if (role != 2) {
+            $('#main').html(' You do not have permissions to view this page.');
+            $('#loading').hide();
+          } else {
+            $.ajax({
+              url: "http://ec2-54-237-22-83.compute-1.amazonaws.com/incident/worker/" + user_id,
+              success: function (data) {
+                $("#incident-list-my").append('<div class="link item"><div id="add-new-incident" class="content new-building-button"><a class="header"><i class="huge add circle icon teal"></i>Create a New Incident</a></div>');
+                $.each(data, function(key, incident){
+                  $("#incident-list-my").append('<div class="link item"> <div class="ui tiny image"> <img src="assets/image.png"> </div><div id=' + incident.incident_id + ' class="content view-building-button"><a class="header">' + incident.address + '</a><div class="meta"><b>Status:</b>' + incident.status + '<br><b>Reported:</b> ' + incident.date_reported +'</div><div class="description">' + incident.description + '</div></div>');
+                });
+                $('.view-building-button').click(function(e){
+                  localStorage.setItem("building_id", e.target.id);
+                  window.location.replace('reporter_dashboard.html');
+                });
+                $('.new-building-button').click(function(e){
+                  window.location.replace('create_incident.html');
+                });
+                $('#loading').hide();
+              },
+              error: function (data) {
+                window.location.replace('error.html');
+              }
+            });
+            $.ajax({
+              url: "http://ec2-54-237-22-83.compute-1.amazonaws.com/incident/all/" + user_id,
+              success: function (data) {
+                $("#incident-list-all").append('<div class="link item"><div id="add-new-incident" class="content new-building-button"><a class="header"><i class="huge add circle icon teal"></i>Create a New Incident</a></div>');
+                $.each(data, function(key, incident){
+                  $("#incident-list-all").append('<div class="link item"> <div class="ui tiny image"> <img src="assets/image.png"> </div><div id=' + incident.incident_id + ' class="content view-building-button"><a class="header">' + incident.address + '</a><div class="meta"><b>Status:</b>' + incident.status + '<br><b>Reported:</b> ' + incident.date_reported +'</div><div class="description">' + incident.description + '</div></div>');
+                });
+                $('.view-building-button').click(function(e){
+                  localStorage.setItem("building_id", e.target.id);
+                  window.location.replace('reporter_dashboard.html');
+                });
+                $('.new-building-button').click(function(e){
+                  window.location.replace('create_incident.html');
+                });
+                $('#loading').hide();
+              },
+              error: function (data) {
+                window.location.replace('error.html');
+              }
+            });
+            $('.item').click(function(){
+              $('.active').removeClass('active');
+              $(this).addClass('active');
+              $('.ribbon').html(this.text.trim());
+              if (this.text.trim() == 'All Issues') {
+                $('#incident-list-my').addClass('hidden');
+                $('#incident-list-all').removeClass('hidden');
+              } else if(this.text.trim() == 'My Issues') {
+                $('#incident-list-all').addClass('hidden');
+                $('#incident-list-my').removeClass('hidden');
+              }
+            });
+          }
+        });
+      </script>
+  </head>
+  <body bgcolor='#242624'>
+    <div class="ui top sidebar ui segment">
+      <div class="ui center aligned page grid">
+        <div class="one column row">
+          <div class="sixteen wide column">
+            <h3 class="ui header">Logout</h3>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class='ui piled segment'>
+      <div class='ui teal dividing header'>
+        <i class='configure icon left'></i>
+        <div class='content left'>
+          Fix It Now!
+          <div class='sub header'>A Crowd Sourced Facility Management Tool</div>
+        </div>
+        <i class='sidebar icon right'></i>
+      </div>
+    </div>
+    <div id="loading">
+      <div class="ui active dimmer">
+        <div class="ui indeterminate text active loader">
+          Loading...
+        </div>
+      </div>
+    </div>
+    <div id='main'>
+      <div class="ui top attached tabular menu">
+        <a class="active item">
+          My Issues
+        </a>
+        <a class="item">
+          All Issues
+        </a>
+      </div>
+      <div class='ui stacked segment welcome'>
+        <a class="ui ribbon teal label">My Issues</a>
+        <div id="incident-list-my" class='ui divided items'>
+        </div>
+        <div id="incident-list-all" class='ui divided items hidden'>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
