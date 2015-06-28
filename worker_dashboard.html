@@ -25,11 +25,11 @@
               success: function (data) {
                 $("#incident-list-my").append('<div class="link item"><div id="add-new-incident" class="content new-building-button"><a class="header"><i class="huge add circle icon teal"></i>Create a New Incident</a></div>');
                 $.each(data, function(key, incident){
-                  $("#incident-list-my").append('<div class="link item"> <div class="ui tiny image"> <img src="assets/image.png"> </div><div id=' + incident.incident_id + ' class="content view-building-button"><a class="header">' + incident.address + '</a><div class="meta"><b>Status:</b>' + incident.status + '<br><b>Reported:</b> ' + incident.date_reported +'</div><div class="description">' + incident.description + '</div></div>');
+                  $("#incident-list-my").append('<div class="link item"> <div class="ui tiny image"> <img src="assets/image.png"> </div><div id=' + incident.incident_id + ' class="content view-building-button"><a class="header">' + incident.address + '</a><div class="meta"><b>Status:</b>' + incident.status + '<br><b>Reported:</b> ' + incident.date_reported +'<br><b>Assigned To:</b> ' + (incident.assignee ? (incident.assignee_id == user_id ? 'Me' : incident.assignee) : 'Unassigned') +'</div><div class="description">' + incident.description + '</div></div>');
                 });
                 $('.view-building-button').click(function(e){
                   localStorage.setItem("building_id", e.target.id);
-                  window.location.replace('reporter_dashboard.html');
+                  window.location.replace('worker_dashboard.html');
                 });
                 $('.new-building-button').click(function(e){
                   window.location.replace('create_incident.html');
@@ -45,11 +45,11 @@
               success: function (data) {
                 $("#incident-list-all").append('<div class="link item"><div id="add-new-incident" class="content new-building-button"><a class="header"><i class="huge add circle icon teal"></i>Create a New Incident</a></div>');
                 $.each(data, function(key, incident){
-                  $("#incident-list-all").append('<div class="link item"> <div class="ui tiny image"> <img src="assets/image.png"> </div><div id=' + incident.incident_id + ' class="content view-building-button"><a class="header">' + incident.address + '</a><div class="meta"><b>Status:</b>' + incident.status + '<br><b>Reported:</b> ' + incident.date_reported +'</div><div class="description">' + incident.description + '</div></div>');
+                  $("#incident-list-all").append('<div class="link item"> <div class="ui tiny image"> <img src="assets/image.png"> </div><div id=' + incident.incident_id + ' class="content view-building-button"><a class="header">' + incident.address + '</a><div class="meta"><b>Status:</b>' + incident.status + '<br><b>Reported:</b> ' + incident.date_reported +'<br><b>Assigned To:</b> ' + (incident.assignee ? (incident.assignee_id == user_id ? 'Me' : incident.assignee) : 'Unassigned') + '</div><div class="description">' + incident.description + '</div></div>');
                 });
                 $('.view-building-button').click(function(e){
                   localStorage.setItem("building_id", e.target.id);
-                  window.location.replace('reporter_dashboard.html');
+                  window.location.replace('worker_dashboard.html');
                 });
                 $('.new-building-button').click(function(e){
                   window.location.replace('create_incident.html');
