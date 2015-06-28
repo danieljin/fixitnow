@@ -7,11 +7,9 @@
         border-radius: 0px !important;
     }
 
-    #poker {
-        border-radius: 0px !important;
-    }
     .ui.dividing.header {
         font-size: small !important;
+        margin-top: 10px !important;
     }
     .ui.piled.segment:after, .ui.piled.segment:before {
         visibility: hidden !important;
