@@ -89,13 +89,50 @@
                 $('#incident-list-all').addClass('hidden');
                 $('#incident-list-my').removeClass('hidden');
                 $('#map-view').addClass('hidden');
-              } else if(this.text.trim() == 'Summary') {
+              } else if(this.text.trim() == 'Map') {
                 $('#incident-list-all').addClass('hidden');
                 $('#incident-list-my').addClass('hidden');
                 $('#map-view').removeClass('hidden');
               }
             });
             $('.ui.dropdown').dropdown();
+            $.ajax({
+              url: "http://ec2-54-237-22-83.compute-1.amazonaws.com/buildings/user/" + user_id,
+              success: function (data) {
+                $.each(data, function(key, building){
+                  $('#building-dropdown').append("<div class='item' data-value='" + building.building_id + "'>" + building.address + "</div>");
+                });
+              },
+              error: function (data) {
+              }
+            });
+            $("#building-select").dropdown({
+              onChange: function (val) {
+                $.ajax({
+                  url: "http://ec2-54-237-22-83.compute-1.amazonaws.com/locations/building/" + val,
+                  success: function (data) {
+                    var unique_floor_plans = [];
+                    $.each(data, function(key, building){
+                      unique_floor_plans[building.floor] = building.floor_plan;
+                    });
+                    var images = '';
+                    if (unique_floor_plans.length > 0){
+                      images = '<div class="ui center aligned segment">';
+                      $.each(unique_floor_plans, function(key, plan){
+                        if(unique_floor_plans[key]) {
+                          images = images + '<div><h2>Floor: ' + key + '</h2><img src=' + unique_floor_plans[key] + ' class="map-summary"></div>';
+                        }
+                      });
+                      images = images + "</div>"
+                    }
+                    $('#map-contents').html(images);
+                  },
+                  error: function (data) {
+                    window.location.replace('error.html');
+                  }
+                });
+              }
+            });
           }
         });
       </script>
@@ -136,7 +173,7 @@
           All Issues
         </a>
         <a class="item">
-          Summary
+          Map
         </a>
       </div>
       <div class='ui stacked segment welcome'>
@@ -154,6 +191,8 @@
               <div class="menu transition hidden" id='building-dropdown' tabindex="-1" style="">
               </div>
             </div>
+          </div>
+          <div id='map-contents'>
           </div>
         </div>
       </div>
