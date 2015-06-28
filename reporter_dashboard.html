@@ -26,7 +26,10 @@
               success: function (data) {
                 $("#incident-list-my").append('<div class="link item"><div id="add-new-incident" class="content new-building-button"><a class="header"><i class="huge add circle icon teal"></i>Create a New Incident</a></div>');
                 $.each(data, function(key, incident){
-                  $("#incident-list-my").append('<div class="link item"> <div class="ui tiny image"> <img src="assets/image.png"> </div><div id=' + incident.incident_id + ' class="content view-building-button"><a class="header">' + incident.address + '</a><div class="meta"><b>Status:</b>' + incident.status + '<br><b>Reported:</b> ' + incident.date_reported +'</div><div class="description">' + incident.description + '</div></div>');
+                  if (!incident.image) {
+                    incident.image = 'assets/image.png'
+                  }
+                  $("#incident-list-my").append('<div class="link item"> <div class="ui tiny image"> <img src="' + incident.image +'"> </div><div id=' + incident.incident_id + ' class="content view-building-button"><a class="header">' + incident.address + '</a><div class="meta"><b>Status:</b>' + incident.status + '<br><b>Reported:</b> ' + incident.date_reported +'</div><div class="description">' + incident.description + '</div></div>');
                 });
                 $('.view-building-button').click(function(e){
                   localStorage.setItem("building_id", e.target.id);
@@ -35,36 +38,35 @@
                 $('.new-building-button').click(function(e){
                   window.location.replace('create_incident.html');
                 });
-                $('#loading').hide();
               },
               error: function (data) {
                 window.location.replace('error.html');
               }
-            });
-            $.ajax({
-              url: "http://ec2-54-237-22-83.compute-1.amazonaws.com/incident/all/" + user_id,
-              success: function (data) {
-                $("#incident-list-all").append('<div class="link item"><div id="add-new-incident" class="content new-building-button"><a class="header"><i class="huge add circle icon teal"></i>Create a New Incident</a></div>');
-                $.each(data, function(key, incident){
-                  $("#incident-list-all").append('<div class="link item"> <div class="ui tiny image"> <img src="assets/image.png"> </div><div id=' + incident.incident_id + ' class="content view-building-button"><a class="header">' + incident.address + '</a><div class="meta"><b>Status:</b>' + incident.status + '<br><b>Reported:</b> ' + incident.date_reported +'</div><div class="description">' + incident.description + '</div></div>');
-                });
-                $('.view-building-button').click(function(e){
-                  localStorage.setItem("building_id", e.target.id);
-                  window.location.replace('reporter_dashboard.html');
-                });
-                $('.new-building-button').click(function(e){
-                  window.location.replace('create_incident.html');
-                });
-                $('#loading').hide();
-              },
-              error: function (data) {
-                window.location.replace('error.html');
-              }
+            }).then(function(){
+              $.ajax({
+                url: "http://ec2-54-237-22-83.compute-1.amazonaws.com/incident/all/" + user_id,
+                success: function (data) {
+                  $("#incident-list-all").append('<div class="link item"><div id="add-new-incident" class="content new-building-button"><a class="header"><i class="huge add circle icon teal"></i>Create a New Incident</a></div>');
+                  $.each(data, function(key, incident){
+                    $("#incident-list-all").append('<div class="link item"> <div class="ui tiny image"> <img src="assets/image.png"> </div><div id=' + incident.incident_id + ' class="content view-building-button"><a class="header">' + incident.address + '</a><div class="meta"><b>Status:</b>' + incident.status + '<br><b>Reported:</b> ' + incident.date_reported +'</div><div class="description">' + incident.description + '</div></div>');
+                  });
+                  $('.view-building-button').click(function(e){
+                    localStorage.setItem("building_id", e.target.id);
+                    window.location.replace('reporter_dashboard.html');
+                  });
+                  $('.new-building-button').click(function(e){
+                    window.location.replace('create_incident.html');
+                  });
+                  $('#loading').hide();
+                },
+                error: function (data) {
+                  window.location.replace('error.html');
+                }
+              });
             });
             $('.item').click(function(){
               $('.active').removeClass('active');
               $(this).addClass('active');
-              $('.ribbon').html(this.text.trim());
               if (this.text.trim() == 'All Issues') {
                 $('#incident-list-my').addClass('hidden');
                 $('#incident-list-all').removeClass('hidden');
@@ -134,7 +136,6 @@
         </a>
       </div>
       <div class='ui stacked segment welcome'>
-        <a class="ui ribbon teal label">My Issues</a>
         <div id="incident-list-my" class='ui divided items'>
         </div>
         <div id="incident-list-all" class='ui divided items hidden'>

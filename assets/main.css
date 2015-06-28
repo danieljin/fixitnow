@@ -177,3 +177,7 @@ h3.ui.header>.icon {
 #upload, #camera, #album, #photo-picker {
     display: none;
 }
+
+.ui.items {
+  margin: 0 !important;
+}
