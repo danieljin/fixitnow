@@ -22,6 +22,11 @@ $(function() {
 
     window.location.replace('index.html');
   });
+
+  $('.refresh').click(function() {
+    location.reload();
+  });
+
 });
 
 function returnToDashboard() {

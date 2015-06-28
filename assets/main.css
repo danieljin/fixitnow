@@ -185,3 +185,7 @@ h3.ui.header>.icon {
 .map-summary {
     width: 100%;
 }
+
+.refresh {
+    cursor: pointer;
+}
