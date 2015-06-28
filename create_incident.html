@@ -130,20 +130,15 @@
             $('#smallImage').hide();
           });
 
-          if (navigator.camera) {
-            $('#camera').show();
-            $('#album').show();
-            $('#photo-picker').show();
-            $('#camera').click(function(){
-              capturePhoto();
-            });
-            $('#album').click(function(){
-              getPhoto(pictureSource.PHOTOLIBRARY);
-            });
-          } else {
-            $('#upload').show();
-            $('#photo-picker').show();
-          }
+          $('#camera').show();
+          $('#album').show();
+          $('#photo-picker').show();
+          $('#camera').click(function(){
+            capturePhoto();
+          });
+          $('#album').click(function(){
+            getPhoto(pictureSource.PHOTOLIBRARY);
+          });
 
           $('.submit').click(function(){
             $.ajax({
