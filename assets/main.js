@@ -27,6 +27,13 @@ $(function() {
     location.reload();
   });
 
+  if ( localStorage.getItem('role') == 3) {
+    $('.manage-devices').click(function() {
+      location.reload();
+    });
+    $('.manage-devices').html('Manage Devices');
+  }
+
 });
 
 function returnToDashboard() {
@@ -39,8 +46,20 @@ function returnToDashboard() {
   } else if (role == 2) {
     window.location.replace('dashboard.html');
   } else if (role == 3) {
-    window.location.replace('manager_dashboard.html');
+    window.location.replace('dashboard.html');
   } else {
     window.location.replace('error.html');
+  }
+}
+
+function manageDevices() {
+  var role = localStorage.getItem('role');
+
+  if (!role) {
+    window.location.replace('index.html');
+  } else if (role == 3) {
+    window.location.replace('devices.html');
+  } else {
+    window.location.replace('dashboard.html');
   }
 }
