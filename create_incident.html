@@ -116,7 +116,7 @@
                     $.each(data, function(key, location){
                       if ( $.inArray(location.space_name, unique_spaces) == -1 ) {
                         unique_spaces[key] = location.space_name;
-                        $('#space-dropdown').append("<div class='item' data-value='" + location.space_name + "'>" + location.space_name + "</div>");
+                        $('#space-dropdown').append("<div class='item' data-value='" + location.location_id + "'>" + location.space_name + "</div>");
                       }
                     });
                   },
@@ -146,6 +146,25 @@
             $('#upload').show();
             $('#photo-picker').show();
           }
+
+          $('.submit').click(function(){
+            $.ajax({
+              method: "POST",
+              url: "http://ec2-54-237-22-83.compute-1.amazonaws.com/incident",
+              data: {
+                description: $('#description').val(),
+                location_id: $('#space-select').dropdown('get value'),
+                image: $('img')[0].src,
+                reporter_id: localStorage.getItem('user_id')
+              },
+              success: function (data) {
+                window.location.replace('reporter_dashboard.html');
+              },
+              error: function (data) {
+                window.location.replace('error.html');
+              }
+            });
+          });
         });
       </script>
   </head>
@@ -195,7 +214,7 @@
           </div>
           <div class='field'>
             <label>Description</label>
-            <textarea></textarea>
+            <textarea id='description'></textarea>
           </div>
           <div class='field'>
             <label>Building</label>
@@ -227,6 +246,7 @@
               </div>
             </div>
           </div>
+          <div class="ui submit button">Submit</div>
         </div>
       </div>
     </div>
