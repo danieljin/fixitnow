@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-      <title>My Issues</title>
+      <title>Dashboard</title>
       <link rel='stylesheet' type='text/css' href='assets/main.css'>
       <link rel='stylesheet' type='text/css' href='assets/semantic.min.css'>
       <script src='assets/jquery.min.js'></script>
@@ -66,28 +66,61 @@
                     $.each(data, function(key, building){
                       $('#building-dropdown').append("<div class='item' data-value='" + building.building_id + "'>" + building.address + "</div>");
                     });
-                    $('#loading').hide();
                   },
                   error: function (data) {
                   }
+                }).then(function(){
+                  $('.item .content:not(#add-new-incident) a.header').click(function(e){
+                    var incident_id = e.target.parentElement.id;
+                    $.ajax({
+                      url: "http://ec2-54-237-22-83.compute-1.amazonaws.com/incident/" + incident_id,
+                      success: function (data) {
+                        if (!data.image) {
+                          data.image = 'assets/image.png';
+                        }
+                        $('.ui.standard.modal img')[0].src = data.image;
+                        $('#description').html('<b>Description</b>: ' + data.description);
+                        $('#address').html('<b>Address</b>: ' + data.address);
+                        $('#floor').html('<b>Floor</b>: ' + data.floor);
+                        $('#space_name').html('<b><Space/b>: ' + data.space);
+                        $('#status').html('<b>Status</b>: ' + data.status);
+                        $('#date_reported').html('<b>Date Reported</b>: ' + data.date_reported);
+                        $('#date_expected').html('<b>Date Expected</b>: ' + data.date_expected);
+                        $('#date_resolved').html('<b>Date Resolved</b>: ' + data.date_resolved);
+                        $('.standard.modal').modal('show');
+                      },
+                      error: function (data) {
+                      }
+                    });
+                  });
+
+                  $('#loading').hide();
                 });
               });
             });
             $('.item').click(function(){
               $('.active').removeClass('active');
               $(this).addClass('active');
-              if (this.text.trim() == 'All Issues') {
+              if (this.text.trim() == 'All Incidents') {
                 $('#incident-list-my').addClass('hidden');
                 $('#incident-list-all').removeClass('hidden');
                 $('#map-view').addClass('hidden');
-              } else if(this.text.trim() == 'My Issues') {
+                $('#summary-view').addClass('hidden');
+              } else if(this.text.trim() == 'My Incidents') {
                 $('#incident-list-all').addClass('hidden');
                 $('#incident-list-my').removeClass('hidden');
                 $('#map-view').addClass('hidden');
+                $('#summary-view').addClass('hidden');
               } else if(this.text.trim() == 'Map') {
                 $('#incident-list-all').addClass('hidden');
                 $('#incident-list-my').addClass('hidden');
                 $('#map-view').removeClass('hidden');
+                $('#summary-view').addClass('hidden');
+              } else if(this.text.trim() == 'Summary') {
+                $('#incident-list-all').addClass('hidden');
+                $('#incident-list-my').addClass('hidden');
+                $('#map-view').addClass('hidden');
+                $('#summary-view').removeClass('hidden');
               }
             });
             $('.ui.dropdown').dropdown();
@@ -133,6 +166,25 @@
         </div>
       </div>
     </div>
+    <div class="ui standard modal transition">
+      <i class="close icon"></i>
+      <div class="header">Incident</div>
+      <div class="content">
+        <div class="ui medium image">
+          <img src="">
+        </div>
+        <div class="description">
+          <div id="description" class="ui header"></div>
+          <div id="address"></div>
+          <div id="floor"></div>
+          <div id="space"></div>
+          <div id="status"></div>
+          <div id="date_reported"></div>
+          <div id="date_expected"></div>
+          <div id="date_resolved"></div>
+        </div>
+      </div>
+    </div>
     <div class='ui piled segment'>
       <div class='ui teal dividing header'>
         <i class='configure icon left'></i>
@@ -153,10 +205,13 @@
     <div id='main'>
       <div class="ui top attached tabular menu">
         <a class="active item">
-          My Issues
+          My Incidents
         </a>
         <a class="item">
-          All Issues
+          All Incidents
+        </a>
+        <a class="item">
+          Summary
         </a>
         <a class="item">
           Map
@@ -166,6 +221,8 @@
         <div id="incident-list-my" class='ui divided items'>
         </div>
         <div id="incident-list-all" class='ui divided items hidden'>
+        </div>
+        <div id="summary-view" class='ui form segment hidden'>
         </div>
         <div id="map-view" class='ui form segment hidden'>
           <div class='field'>
