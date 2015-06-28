@@ -14,6 +14,10 @@
     .ui.piled.segment:after, .ui.piled.segment:before {
         visibility: hidden !important;
     }
+
+    #photo-picker #upload {
+        display: none;
+    }
 }
 
 @media (min-width:600px) {
@@ -21,6 +25,10 @@
         margin: 0 auto;
         width: 90%;
         max-width: 600px;
+    }
+
+    #photo-picker #camera, #photo-picker #album {
+        display: none;
     }
 }
 
@@ -185,10 +193,6 @@ h3.ui.header>.icon {
 
 #album {
     margin-top: 10px;
-}
-
-#upload, #camera, #album, #photo-picker {
-    display: none;
 }
 
 .ui.items {
