@@ -150,7 +150,7 @@
           $('.submit').click(function(){
             $.ajax({
               method: "POST",
-              url: "http://ec2-54-237-22-83.compute-1.amazonaws.com/incidents",
+              url: "http://ec2-54-237-22-83.compute-1.amazonaws.com/incident",
               data: {
                 description: $('#description').val(),
                 location_id: $('#space-select').dropdown('get value'),
@@ -161,6 +161,7 @@
                 window.location.replace('reporter_dashboard.html');
               },
               error: function (data) {
+                window.location.replace('error.html');
               }
             });
           });
